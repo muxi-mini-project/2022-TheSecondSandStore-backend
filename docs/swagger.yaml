@@ -1,0 +1,13 @@
+host: localhost:8080
+info:
+  contact:
+    email: 2313661940@qq.com
+    name: rosy
+  description: 店小贰小程序
+  termsOfService: http://swagger.io/terrms
+  title: TheSecondSandStore
+  version: 1.0.0
+paths: {}
+schemes:
+- http
+swagger: "2.0"

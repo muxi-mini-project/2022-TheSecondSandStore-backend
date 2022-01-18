@@ -1,0 +1,18 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "店小贰小程序",
+        "title": "TheSecondSandStore",
+        "termsOfService": "http://swagger.io/terrms",
+        "contact": {
+            "name": "rosy",
+            "email": "2313661940@qq.com"
+        },
+        "version": "1.0.0"
+    },
+    "host": "localhost:8080",
+    "paths": {}
+}
