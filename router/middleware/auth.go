@@ -1,9 +1,23 @@
 package middleware
 
 import (
+	"second/handler"
+	"second/pkg/auth"
+
 	"github.com/gin-gonic/gin"
 )
 
-func ParseRequestValid(c *gin.Context) {
+func AuthMiddleware(c *gin.Context) {
+	// Parse the json web token.
+	ctx, err := auth.ParseRequest(c)
+	if err != nil {
+		handler.SendBadRes(c, "401", "Errors in authentication by token", "")
+		c.Abort()
+		return
+	}
 
+	c.Set("userID", ctx.ID)
+	c.Set("expiresAt", ctx.ExpiresAt)
+
+	c.Next()
 }
