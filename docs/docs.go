@@ -17,7 +17,7 @@ var doc = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terrms",
+        "termsOfService": "http://swagger.io/terrms/",
         "contact": {
             "name": "rosy",
             "email": "2313661940@qq.com"
@@ -26,7 +26,679 @@ var doc = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/auth": {
+            "post": {
+                "description": "登录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "输入账号密码登录",
+                "parameters": [
+                    {
+                        "description": "Account 账户 Password 密码",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "login successfully"
+                    },
+                    "400": {
+                        "description": "not found"
+                    },
+                    "500": {
+                        "description": "errors in server"
+                    }
+                }
+            }
+        },
+        "/collection": {
+            "get": {
+                "description": "获取用户所有收藏",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "collection"
+                ],
+                "summary": "获得收藏",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok,it has been provided successfully"
+                    },
+                    "400": {
+                        "description": "errors in server"
+                    }
+                }
+            },
+            "post": {
+                "description": "将创建的收藏加入数据库中",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "collection"
+                ],
+                "summary": "添加收藏",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "CollectionInfo",
+                        "name": "info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/collection.CollectionInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok,it has been added successfully"
+                    },
+                    "400": {
+                        "description": "errors in server"
+                    }
+                }
+            },
+            "delete": {
+                "description": "将收藏从数据库中删除",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "collection"
+                ],
+                "summary": "删除收藏",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "CollectionInfo",
+                        "name": "info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/collection.CollectionInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok,it has been deleted successfully"
+                    },
+                    "400": {
+                        "description": "errors in server"
+                    }
+                }
+            }
+        },
+        "/feedback": {
+            "post": {
+                "description": "将创建的意见反馈加入数据库中",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "feedback"
+                ],
+                "summary": "添加反馈",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "FeedbackInfo",
+                        "name": "info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/feedback.FeedbackInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok,it has been added successfully"
+                    },
+                    "400": {
+                        "description": "errors in server"
+                    }
+                }
+            }
+        },
+        "/goods": {
+            "post": {
+                "description": "发布一个新商品",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "goods"
+                ],
+                "summary": "发布商品",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "GoodsInfo",
+                        "name": "info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/goods.GoodsInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok,it has been added successfully"
+                    },
+                    "400": {
+                        "description": "errors in server"
+                    }
+                }
+            }
+        },
+        "/goods/details/all": {
+            "get": {
+                "description": "获取所有商品信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "goods"
+                ],
+                "summary": "获取信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok,it has been provided successfully"
+                    },
+                    "400": {
+                        "description": "errors in server"
+                    }
+                }
+            }
+        },
+        "/goods/details/all/condition/:condition": {
+            "get": {
+                "description": "获取搜索的商品信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "goods"
+                ],
+                "summary": "搜索商品",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户在搜索框内输入的搜索内容",
+                        "name": "condition",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok,it has been searched and provided successfully"
+                    },
+                    "400": {
+                        "description": "errors in server"
+                    }
+                }
+            }
+        },
+        "/goods/details/one/:goods_id": {
+            "get": {
+                "description": "获取某一商品信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "goods"
+                ],
+                "summary": "获取信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "商品ID",
+                        "name": "goods_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok,it has been provided successfully"
+                    },
+                    "400": {
+                        "description": "errors in server"
+                    }
+                }
+            },
+            "put": {
+                "description": "修改商品信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "goods"
+                ],
+                "summary": "更新信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "GoodsInfo",
+                        "name": "info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/goods.GoodsInfo"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "商品ID",
+                        "name": "goods_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok,it has been updated successfully"
+                    },
+                    "400": {
+                        "description": "errors in server"
+                    }
+                }
+            }
+        },
+        "/tag": {
+            "get": {
+                "description": "获取用户的所有标签",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tag"
+                ],
+                "summary": "获得标签",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok,it has been provided successfully"
+                    },
+                    "400": {
+                        "description": "errors in server"
+                    }
+                }
+            },
+            "post": {
+                "description": "将创建的标签加入数据库中",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tag"
+                ],
+                "summary": "添加标签",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "TagInfo",
+                        "name": "info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/tag.TagInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok,it has been added successfully"
+                    },
+                    "400": {
+                        "description": "errors in server"
+                    }
+                }
+            }
+        },
+        "/tag/:tag_id": {
+            "delete": {
+                "description": "将标签从数据库中删除",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tag"
+                ],
+                "summary": "删除标签",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": " 标签ID",
+                        "name": "tag_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok,it has been deleted successfully"
+                    },
+                    "400": {
+                        "description": "errors in server"
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "description": "获取用户昵称和头像",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "获得用户信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok,it has been provided successfully"
+                    },
+                    "400": {
+                        "description": "errors in server"
+                    }
+                }
+            }
+        },
+        "/user/image": {
+            "put": {
+                "description": "修改用户头像",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "更新信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "UserInfo",
+                        "name": "info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.UserInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok,it has been updated successfully"
+                    },
+                    "400": {
+                        "description": "errors in server"
+                    }
+                }
+            }
+        },
+        "/user/nickname": {
+            "put": {
+                "description": "修改用户昵称",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "更新信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "UserInfo",
+                        "name": "info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.UserInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok,it has been updated successfully"
+                    },
+                    "400": {
+                        "description": "errors in server"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "auth.LoginRequest": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "collection.CollectionInfo": {
+            "type": "object",
+            "properties": {
+                "collection_id": {
+                    "type": "integer"
+                },
+                "goods_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "feedback.FeedbackInfo": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
+        "goods.GoodsInfo": {
+            "type": "object",
+            "properties": {
+                "buyer_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "tag.TagInfo": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "ownerId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "user.UserInfo": {
+            "type": "object",
+            "properties": {
+                "image": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }`
 
 type swaggerInfo struct {
@@ -41,8 +713,8 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0.0",
-	Host:        "localhost:8080",
-	BasePath:    "",
+	Host:        "localhost",
+	BasePath:    "api/v1/",
 	Schemes:     []string{"http"},
 	Title:       "TheSecondSandStore",
 	Description: "店小贰小程序",

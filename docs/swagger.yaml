@@ -1,13 +1,456 @@
-host: localhost:8080
+basePath: api/v1/
+definitions:
+  auth.LoginRequest:
+    properties:
+      account:
+        type: string
+      password:
+        type: string
+    type: object
+  collection.CollectionInfo:
+    properties:
+      collection_id:
+        type: integer
+      goods_id:
+        type: integer
+    type: object
+  feedback.FeedbackInfo:
+    properties:
+      content:
+        type: string
+    type: object
+  goods.GoodsInfo:
+    properties:
+      buyer_id:
+        type: string
+    type: object
+  tag.TagInfo:
+    properties:
+      content:
+        type: string
+      ownerId:
+        type: integer
+    type: object
+  user.UserInfo:
+    properties:
+      image:
+        type: string
+      nickname:
+        type: string
+    type: object
+host: localhost
 info:
   contact:
     email: 2313661940@qq.com
     name: rosy
   description: 店小贰小程序
-  termsOfService: http://swagger.io/terrms
+  termsOfService: http://swagger.io/terrms/
   title: TheSecondSandStore
   version: 1.0.0
-paths: {}
+paths:
+  /auth:
+    post:
+      consumes:
+      - application/json
+      description: 登录
+      parameters:
+      - description: Account 账户 Password 密码
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: login successfully
+        "400":
+          description: not found
+        "500":
+          description: errors in server
+      summary: 输入账号密码登录
+      tags:
+      - auth
+  /collection:
+    delete:
+      consumes:
+      - application/json
+      description: 将收藏从数据库中删除
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: CollectionInfo
+        in: body
+        name: info
+        required: true
+        schema:
+          $ref: '#/definitions/collection.CollectionInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok,it has been deleted successfully
+        "400":
+          description: errors in server
+      summary: 删除收藏
+      tags:
+      - collection
+    get:
+      consumes:
+      - application/json
+      description: 获取用户所有收藏
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok,it has been provided successfully
+        "400":
+          description: errors in server
+      summary: 获得收藏
+      tags:
+      - collection
+    post:
+      consumes:
+      - application/json
+      description: 将创建的收藏加入数据库中
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: CollectionInfo
+        in: body
+        name: info
+        required: true
+        schema:
+          $ref: '#/definitions/collection.CollectionInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok,it has been added successfully
+        "400":
+          description: errors in server
+      summary: 添加收藏
+      tags:
+      - collection
+  /feedback:
+    post:
+      consumes:
+      - application/json
+      description: 将创建的意见反馈加入数据库中
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: FeedbackInfo
+        in: body
+        name: info
+        required: true
+        schema:
+          $ref: '#/definitions/feedback.FeedbackInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok,it has been added successfully
+        "400":
+          description: errors in server
+      summary: 添加反馈
+      tags:
+      - feedback
+  /goods:
+    post:
+      consumes:
+      - application/json
+      description: 发布一个新商品
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: GoodsInfo
+        in: body
+        name: info
+        required: true
+        schema:
+          $ref: '#/definitions/goods.GoodsInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok,it has been added successfully
+        "400":
+          description: errors in server
+      summary: 发布商品
+      tags:
+      - goods
+  /goods/details/all:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有商品信息
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok,it has been provided successfully
+        "400":
+          description: errors in server
+      summary: 获取信息
+      tags:
+      - goods
+  /goods/details/all/condition/:condition:
+    get:
+      consumes:
+      - application/json
+      description: 获取搜索的商品信息
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 用户在搜索框内输入的搜索内容
+        in: path
+        name: condition
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok,it has been searched and provided successfully
+        "400":
+          description: errors in server
+      summary: 搜索商品
+      tags:
+      - goods
+  /goods/details/one/:goods_id:
+    get:
+      consumes:
+      - application/json
+      description: 获取某一商品信息
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: 商品ID
+        in: path
+        name: goods_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok,it has been provided successfully
+        "400":
+          description: errors in server
+      summary: 获取信息
+      tags:
+      - goods
+    put:
+      consumes:
+      - application/json
+      description: 修改商品信息
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: GoodsInfo
+        in: body
+        name: info
+        required: true
+        schema:
+          $ref: '#/definitions/goods.GoodsInfo'
+      - description: 商品ID
+        in: path
+        name: goods_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok,it has been updated successfully
+        "400":
+          description: errors in server
+      summary: 更新信息
+      tags:
+      - goods
+  /tag:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户的所有标签
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok,it has been provided successfully
+        "400":
+          description: errors in server
+      summary: 获得标签
+      tags:
+      - tag
+    post:
+      consumes:
+      - application/json
+      description: 将创建的标签加入数据库中
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: TagInfo
+        in: body
+        name: info
+        required: true
+        schema:
+          $ref: '#/definitions/tag.TagInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok,it has been added successfully
+        "400":
+          description: errors in server
+      summary: 添加标签
+      tags:
+      - tag
+  /tag/:tag_id:
+    delete:
+      consumes:
+      - application/json
+      description: 将标签从数据库中删除
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: ' 标签ID'
+        in: path
+        name: tag_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok,it has been deleted successfully
+        "400":
+          description: errors in server
+      summary: 删除标签
+      tags:
+      - tag
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户昵称和头像
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok,it has been provided successfully
+        "400":
+          description: errors in server
+      summary: 获得用户信息
+      tags:
+      - user
+  /user/image:
+    put:
+      consumes:
+      - application/json
+      description: 修改用户头像
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: UserInfo
+        in: body
+        name: info
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok,it has been updated successfully
+        "400":
+          description: errors in server
+      summary: 更新信息
+      tags:
+      - user
+  /user/nickname:
+    put:
+      consumes:
+      - application/json
+      description: 修改用户昵称
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: UserInfo
+        in: body
+        name: info
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok,it has been updated successfully
+        "400":
+          description: errors in server
+      summary: 更新信息
+      tags:
+      - user
 schemes:
 - http
 swagger: "2.0"

@@ -12,7 +12,7 @@ type Response struct {
 	Data    string `json:"data"`
 }
 
-func SendBadRes(c *gin.Context, code string, message string, data string) {
+func SendRes(c *gin.Context, code string, message string, data string) {
 	str, _ := strconv.Atoi(code)
 	c.JSON(str, Response{
 		Code:    code,

@@ -11,7 +11,7 @@ func AuthMiddleware(c *gin.Context) {
 	// Parse the json web token.
 	ctx, err := auth.ParseRequest(c)
 	if err != nil {
-		handler.SendBadRes(c, "401", "Errors in authentication by token", "")
+		handler.SendRes(c, "401", "Errors in authentication by token", "")
 		c.Abort()
 		return
 	}
