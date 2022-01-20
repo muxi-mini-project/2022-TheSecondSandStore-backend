@@ -1,4 +1,4 @@
-basePath: api/v1/
+basePath: /api/v1/
 definitions:
   auth.LoginRequest:
     properties:
@@ -38,7 +38,7 @@ definitions:
       nickname:
         type: string
     type: object
-host: localhost
+host: 127.0.0.1
 info:
   contact:
     email: 2313661940@qq.com

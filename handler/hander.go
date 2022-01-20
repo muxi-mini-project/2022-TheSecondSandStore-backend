@@ -1,22 +1,16 @@
 package handler
 
 import (
-	"strconv"
+	"encoding/json"
+	_ "second/model"
 
-	"github.com/gin-gonic/gin"
+	_ "github.com/gin-gonic/gin"
 )
 
-type Response struct {
-	Code    string `json:"code"`
-	Message string `json:"message"`
-	Data    string `json:"data"`
-}
-
-func SendRes(c *gin.Context, code string, message string, data string) {
-	str, _ := strconv.Atoi(code)
-	c.JSON(str, Response{
-		Code:    code,
-		Message: message,
-		Data:    data,
-	})
+func ObjectToString(object interface{}) (string, error) {
+	byte, err := json.Marshal(object)
+	if err != nil {
+		return "", err
+	}
+	return string(byte), nil
 }

@@ -1,13 +1,13 @@
 package collection
 
 import (
+	"log"
+	"second/handler"
+	"second/model"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
-
-type CollectionInfo struct {
-	GoodsId      int `json:"goods_id"`
-	CollectionId int `json:"collection_id"`
-}
 
 // @Summary 添加收藏
 // @Description 将创建的收藏加入数据库中
@@ -15,11 +15,50 @@ type CollectionInfo struct {
 // @Accept json
 // @Produce json
 // @Param token header string true "token"
-// @Param info body collection.CollectionInfo true "CollectionInfo"
-// @Success 200 "ok,it has been added successfully"
-// @Failure 400 "errors in server"
+// @Param info body model.CollectionInfo true "The id of the goods"
+// @Success 200 {object} model.Response "successful"
+// @Failure 400 {object} model.Response "errors!"
+// @Failure 401 {object} model.Response "Errors in authentication by token"
+// @Failure 500 {object} model.Response "errors!"
 // @Router /collection [post]
 func NewOne(c *gin.Context) {
+	info := model.CollectionInfo{}
+	err := c.BindJSON(&info)
+	if err != nil {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "some errors in the body of the request",
+			Data:    "null",
+		})
+	}
+	goodsid := info.GoodsId
+
+	useridstr := c.Request.Header.Get("userID")
+	userid, err := strconv.Atoi(useridstr)
+	if err != nil {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "some errors in the body of the request",
+			Data:    "null",
+		})
+		log.Fatal(err)
+	}
+	collection := model.Collection{}
+	collection.GoodsId = goodsid
+	collection.OwnerId = userid
+	if err := model.MysqlDb.Db.Create(&collection).Error; err != nil {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "Because of some errors,it has failed to be created",
+			Data:    "null",
+		})
+		log.Fatal(err)
+	}
+	c.JSON(200, model.Response{
+		Code:    200,
+		Message: "ok",
+		Data:    "created successfully",
+	})
 
 }
 
@@ -29,12 +68,37 @@ func NewOne(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param token header string true "token"
-// @Param info body collection.CollectionInfo true "CollectionInfo"
-// @Success 200 "ok,it has been deleted successfully"
-// @Failure 400 "errors in server"
-// @Router /collection [delete]
+// @Param collection_id path string true "用户在搜索框内输入的搜索内容"
+// @Success 200 {object} model.Response "successful"
+// @Failure 400 {object} model.Response "errors!"
+// @Failure 401 {object} model.Response "Errors in authentication by token"
+// @Failure 500 {object} model.Response "errors!"
+// @Router /collection/:collection_id [delete]
 func DeleteOne(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("collection_id"))
+	if err != nil {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "some errors in the body of the request",
+			Data:    "null",
+		})
+		log.Fatal(err)
+	}
+	collection := model.Collection{}
+	if err := model.MysqlDb.Db.Where("id = ?", id).Delete(collection).Error; err != nil {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "Because of some errors,it has failed to be deleted",
+			Data:    "null",
+		})
+		log.Fatal(err)
+	}
 
+	c.JSON(200, model.Response{
+		Code:    200,
+		Message: "ok",
+		Data:    "null",
+	})
 }
 
 // @Summary 获得收藏
@@ -43,9 +107,70 @@ func DeleteOne(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param token header string true "token"
-// @Success 200 "ok,it has been provided successfully"
-// @Failure 400 "errors in server"
+// @Success 200 {object} model.Response "successful"
+// @Failure 400 {object} model.Response "errors!"
+// @Failure 401 {object} model.Response "Errors in authentication by token"
+// @Failure 500 {object} model.Response "errors!"
 // @Router /collection [get]
 func GetInfo(c *gin.Context) {
+	useridstr := c.Request.Header.Get("userID")
+	userid, err := strconv.Atoi(useridstr)
+	if err != nil {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "some errors in the body of the request",
+			Data:    "null",
+		})
+		log.Fatal(err)
+	}
 
+	var collections []model.Collection
+
+	if err := model.MysqlDb.Db.Where("owner_id = ?", userid).Find(&collections).Error; err != nil {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "Because of some errors,it has failed to be deleted",
+			Data:    "null",
+		})
+		log.Fatal(err)
+	}
+
+	var Res []model.CollectionResponse
+	superuser := &model.SuperUser
+	superuser.AutoUpdate(userid)
+
+	for _, v := range collections {
+		var res = model.CollectionResponse{}
+
+		goodsid := v.GoodsId
+
+		super := &model.SuperGoods
+		super.AutoUpdate(goodsid)
+
+		res.Content = super.Description
+		res.GoodsImage = super.Image
+		res.Time = super.Time
+		res.QQAccount = superuser.QQAccount
+		res.UserImage = superuser.Image
+		res.UserNickname = superuser.NickName
+
+		Res = append(Res, res)
+	}
+
+	str, err := handler.ObjectToString(Res)
+
+	if err != nil {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "some errors happened in the server",
+			Data:    "",
+		})
+		log.Fatal(err)
+	}
+
+	c.JSON(200, model.Response{
+		Code:    200,
+		Message: "ok",
+		Data:    str,
+	})
 }

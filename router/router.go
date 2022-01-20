@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	_ "second/docs"
 	"second/handler/auth"
 	"second/handler/collection"
 	"second/handler/feedback"
@@ -57,22 +58,22 @@ func LoadRouters(r *gin.Engine) {
 	collectionrouter := r.Group("/api/v1/collection")
 	collectionrouter.Use(middleware.AuthMiddleware)
 	{
-		goodsrouter.POST("/", collection.NewOne)
-		goodsrouter.DELETE("/", collection.DeleteOne)
-		goodsrouter.GET("/", collection.GetInfo)
+		collectionrouter.POST("/", collection.NewOne)
+		collectionrouter.DELETE("/:collection_id", collection.DeleteOne)
+		collectionrouter.GET("/", collection.GetInfo)
 	}
 
 	tagrouter := r.Group("/api/v1/tag")
 	tagrouter.Use(middleware.AuthMiddleware)
 	{
-		goodsrouter.POST("/", tag.NewOne)
-		goodsrouter.DELETE("/:tag_id", tag.DeleteOne)
-		goodsrouter.GET("/", tag.GetInfo)
+		tagrouter.POST("/", tag.NewOne)
+		tagrouter.DELETE("/:tag_id", tag.DeleteOne)
+		tagrouter.GET("/", tag.GetInfo)
 	}
 
 	feedbackrouter := r.Group("/api/v1/feedback")
 	feedbackrouter.Use(middleware.AuthMiddleware)
 	{
-		goodsrouter.POST("/", feedback.NewOne)
+		feedbackrouter.POST("/", feedback.NewOne)
 	}
 }

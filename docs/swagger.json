@@ -13,8 +13,8 @@
         },
         "version": "1.0.0"
     },
-    "host": "localhost",
-    "basePath": "api/v1/",
+    "host": "127.0.0.1",
+    "basePath": "/api/v1/",
     "paths": {
         "/auth": {
             "post": {
