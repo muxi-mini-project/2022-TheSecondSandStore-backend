@@ -392,6 +392,8 @@ github.com/r-rosy/General v0.0.0-20220120044153-24bc12d4c1ed h1:lMkPjz1wxxBxJ6z4
 github.com/r-rosy/General v0.0.0-20220120044153-24bc12d4c1ed/go.mod h1:Wl2X04KTEAICmsSWXCeQ+qtJeINUfWPUjtk66OVqnaw=
 github.com/r-rosy/General v0.0.0-20220120045221-4ed8e1dd103b h1:f3TGx4zlX9wtJtF+MHs7zOGGk9QMij3XCOspkcj35P0=
 github.com/r-rosy/General v0.0.0-20220120045221-4ed8e1dd103b/go.mod h1:Wl2X04KTEAICmsSWXCeQ+qtJeINUfWPUjtk66OVqnaw=
+github.com/r-rosy/General v0.0.0-20220121114739-70768f8b3606 h1:xcWdztmmmKQCi12udawkr+SLZZKaqObyu/gzSDgyD9E=
+github.com/r-rosy/General v0.0.0-20220121114739-70768f8b3606/go.mod h1:Wl2X04KTEAICmsSWXCeQ+qtJeINUfWPUjtk66OVqnaw=
 github.com/rogpeppe/fastuuid v1.2.0/go.mod h1:jVj6XXZzXRy/MSR5jhDC/2q6DgLz+nrA6LYCDYWNEvQ=
 github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFRclV5y23lUDJ4=
 github.com/rogpeppe/go-internal v1.6.1/go.mod h1:xXDCJY+GAPziupqXw64V24skbSoqbTEfhy4qGm1nDQc=

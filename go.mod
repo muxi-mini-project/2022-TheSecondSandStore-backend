@@ -14,7 +14,7 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
-	github.com/r-rosy/General v0.0.0-20220120045221-4ed8e1dd103b // indirect
+	github.com/r-rosy/General v0.0.0-20220121114739-70768f8b3606 // indirect
 	github.com/spf13/afero v1.8.0 // indirect
 	github.com/spf13/viper v1.10.1 // indirect
 	github.com/swaggo/gin-swagger v1.3.3 // indirect

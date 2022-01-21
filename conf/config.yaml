@@ -1,9 +1,13 @@
 mysql:
   host: "127.0.0.1"
-  port: "3306"
-  user: "rosy"
+  port: 3306
+  user: "root"
   password: "123456"
   db: "second"
   charset: "UTF-8"
 token:
   secret_key: "generating_secrect_key_by_rosy"
+  expired: 30
+RemoteKey:
+  ACCESS_KEY : "9BzQ1HoMOYYEtkYGUEmyGWZK7muaXViwRYyYShXO"
+  SECRET_KEY : "9fFjcuh5r1mSbakKoWdwpFgNlExVq03TNgEI5SjU"

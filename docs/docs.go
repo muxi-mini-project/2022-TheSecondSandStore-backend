@@ -42,24 +42,33 @@ var doc = `{
                 "summary": "输入账号密码登录",
                 "parameters": [
                     {
-                        "description": "Account 账户 Password 密码",
-                        "name": "payload",
+                        "description": "Account 账户 Password 将密码进行base64编码后的字符串",
+                        "name": "req",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.LoginRequest"
+                            "$ref": "#/definitions/model.LoginRequest"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "login successfully"
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "400": {
-                        "description": "not found"
+                        "description": "Unauthentication",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "500": {
-                        "description": "errors in server"
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     }
                 }
             }
@@ -88,10 +97,28 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok,it has been provided successfully"
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "400": {
-                        "description": "errors in server"
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     }
                 }
             },
@@ -116,24 +143,44 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "description": "CollectionInfo",
+                        "description": "The id of the goods",
                         "name": "info",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/collection.CollectionInfo"
+                            "$ref": "#/definitions/model.CollectionInfo"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok,it has been added successfully"
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "400": {
-                        "description": "errors in server"
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     }
                 }
-            },
+            }
+        },
+        "/collection/:collection_id": {
             "delete": {
                 "description": "将收藏从数据库中删除",
                 "consumes": [
@@ -155,21 +202,37 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "description": "CollectionInfo",
-                        "name": "info",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/collection.CollectionInfo"
-                        }
+                        "type": "string",
+                        "description": "用户在搜索框内输入的搜索内容",
+                        "name": "collection_id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok,it has been deleted successfully"
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "400": {
-                        "description": "errors in server"
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     }
                 }
             }
@@ -201,16 +264,34 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/feedback.FeedbackInfo"
+                            "$ref": "#/definitions/model.FeedbackInfo"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok,it has been added successfully"
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "400": {
-                        "description": "errors in server"
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     }
                 }
             }
@@ -242,16 +323,34 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/goods.GoodsInfo"
+                            "$ref": "#/definitions/model.GoodsInfo"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok,it has been added successfully"
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "400": {
-                        "description": "errors in server"
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     }
                 }
             }
@@ -280,10 +379,28 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok,it has been provided successfully"
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "400": {
-                        "description": "errors in server"
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     }
                 }
             }
@@ -319,10 +436,28 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok,it has been searched and provided successfully"
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "400": {
-                        "description": "errors in server"
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     }
                 }
             }
@@ -391,7 +526,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/goods.GoodsInfo"
+                            "$ref": "#/definitions/model.GoodsInfo"
                         }
                     },
                     {
@@ -404,10 +539,28 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok,it has been updated successfully"
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "400": {
-                        "description": "errors in server"
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     }
                 }
             }
@@ -436,10 +589,28 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok,it has been provided successfully"
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "400": {
-                        "description": "errors in server"
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     }
                 }
             },
@@ -469,16 +640,34 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/tag.TagInfo"
+                            "$ref": "#/definitions/model.TagInfo"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok,it has been added successfully"
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "400": {
-                        "description": "errors in server"
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     }
                 }
             }
@@ -514,10 +703,28 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok,it has been deleted successfully"
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "400": {
-                        "description": "errors in server"
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     }
                 }
             }
@@ -546,10 +753,28 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok,it has been provided successfully"
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "400": {
-                        "description": "errors in server"
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     }
                 }
             }
@@ -581,16 +806,34 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.UserInfo"
+                            "$ref": "#/definitions/model.UserInfo"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok,it has been updated successfully"
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "400": {
-                        "description": "errors in server"
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     }
                 }
             }
@@ -628,17 +871,68 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok,it has been updated successfully"
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     },
                     "400": {
-                        "description": "errors in server"
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
                     }
                 }
             }
         }
     },
     "definitions": {
-        "auth.LoginRequest": {
+        "model.CollectionInfo": {
+            "type": "object",
+            "properties": {
+                "goods_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.FeedbackInfo": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.GoodsInfo": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "tag_ids": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.LoginRequest": {
             "type": "object",
             "properties": {
                 "account": {
@@ -649,18 +943,21 @@ var doc = `{
                 }
             }
         },
-        "collection.CollectionInfo": {
+        "model.Response": {
             "type": "object",
             "properties": {
-                "collection_id": {
+                "code": {
                     "type": "integer"
                 },
-                "goods_id": {
-                    "type": "integer"
+                "data": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
                 }
             }
         },
-        "feedback.FeedbackInfo": {
+        "model.TagInfo": {
             "type": "object",
             "properties": {
                 "content": {
@@ -668,22 +965,14 @@ var doc = `{
                 }
             }
         },
-        "goods.GoodsInfo": {
+        "model.UserInfo": {
             "type": "object",
             "properties": {
-                "buyer_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "tag.TagInfo": {
-            "type": "object",
-            "properties": {
-                "content": {
+                "image": {
                     "type": "string"
                 },
-                "ownerId": {
-                    "type": "integer"
+                "nickName": {
+                    "type": "string"
                 }
             }
         },
@@ -713,7 +1002,7 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0.0",
-	Host:        "127.0.0.1",
+	Host:        "127.0.0.1:8080",
 	BasePath:    "/api/v1/",
 	Schemes:     []string{"http"},
 	Title:       "TheSecondSandStore",

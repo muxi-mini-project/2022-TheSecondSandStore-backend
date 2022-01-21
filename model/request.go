@@ -10,12 +10,21 @@ type CollectionInfo struct {
 }
 
 type FeedbackInfo struct {
-	Content string
+	Content string `json:"content"`
 }
 
 type GoodsInfo struct {
-	Description string
-	Image       string
-	TagIds      string
-	Time        string
+	Description string `json:"description"`
+	Image       string `json:"image"`
+	TagIds      string `json:"tag_ids"`
+	Time        string `json:"time"`
+}
+
+type TagInfo struct {
+	Content string
+}
+
+type UserInfo struct {
+	Image    string
+	NickName string
 }

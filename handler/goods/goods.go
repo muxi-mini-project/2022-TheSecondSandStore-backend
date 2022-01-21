@@ -2,7 +2,7 @@ package goods
 
 import (
 	"log"
-	"second/handler"
+	_ "second/handler"
 	"second/model"
 	"strconv"
 
@@ -123,21 +123,10 @@ func GetInfoAll(c *gin.Context) {
 		Res = append(Res, res)
 	}
 
-	str, err := handler.ObjectToString(Res)
-
-	if err != nil {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "some errors happened in the server",
-			Data:    "null",
-		})
-		log.Fatal(err)
-	}
-
 	c.JSON(200, model.Response{
 		Code:    200,
 		Message: "ok",
-		Data:    str,
+		Data:    Res,
 	})
 
 }
@@ -153,7 +142,36 @@ func GetInfoAll(c *gin.Context) {
 // @Failure 400 "errors in server"
 // @Router /goods/details/one/:goods_id [get]
 func GetInfoId(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("goods_id"))
+	if err != nil {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "some errors in the body of the request",
+			Data:    "null",
+		})
+		log.Fatal(err)
+	}
 
+	supergoods := &model.SuperGoods
+	supergoods.AutoUpdate(id)
+
+	res := model.GoodsResponse{}
+	res.Content = supergoods.Description
+	res.GoodsImage = supergoods.Image
+	res.Time = supergoods.Time
+
+	superuser := &model.SuperUser
+	superuser.AutoUpdate(supergoods.SellerId)
+
+	res.QQAccount = superuser.QQAccount
+	res.UserImage = superuser.Image
+	res.UserNickname = superuser.NickName
+
+	c.JSON(200, model.Response{
+		Code:    200,
+		Message: "ok",
+		Data:    res,
+	})
 }
 
 // @Summary 发布商品
@@ -162,7 +180,7 @@ func GetInfoId(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param token header string true "token"
-// @Param info body goods.GoodsInfo true "GoodsInfo"
+// @Param info body model.GoodsInfo true "GoodsInfo"
 // @Success 200 {object} model.Response "successful"
 // @Failure 400 {object} model.Response "errors!"
 // @Failure 401 {object} model.Response "Errors in authentication by token"
@@ -179,8 +197,8 @@ func NewOne(c *gin.Context) {
 		})
 	}
 
-	useridstr := c.Request.Header.Get("userID")
-	userid, err := strconv.Atoi(useridstr)
+	UserIdStr := c.Request.Header.Get("userID")
+	userid, err := strconv.Atoi(UserIdStr)
 	if err != nil {
 		c.JSON(400, model.Response{
 			Code:    400,
@@ -219,9 +237,21 @@ func NewOne(c *gin.Context) {
 // @Produce json
 // @Param token header string true "token"
 // @Param  condition path string true "用户在搜索框内输入的搜索内容"
-// @Success 200 "ok,it has been searched and provided successfully"
-// @Failure 400 "errors in server"
+// @Success 200 {object} model.Response "successful"
+// @Failure 400 {object} model.Response "errors!"
+// @Failure 401 {object} model.Response "Errors in authentication by token"
+// @Failure 500 {object} model.Response "errors!"
 // @Router /goods/details/all/condition/:condition [get]
 func GetInfoCond(c *gin.Context) {
+	condition := c.Param("condition")
 
+	var goods []model.Goods
+	constr := "%" + condition + "%"
+	model.MysqlDb.Db.Where("description LIKE ?", constr).Find(&goods)
+
+	c.JSON(200, model.Response{
+		Code:    200,
+		Message: "ok",
+		Data:    goods,
+	})
 }

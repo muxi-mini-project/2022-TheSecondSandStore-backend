@@ -1,13 +1,16 @@
 package auth
 
 import (
+	"encoding/base64"
+	_ "fmt"
 	"log"
-	"second/handler"
+	_ "second/handler"
 	"second/model"
 	"second/pkg/token"
 
 	"github.com/gin-gonic/gin"
 	"github.com/r-rosy/General/ccnu"
+	"gorm.io/gorm"
 )
 
 // @Summary 输入账号密码登录
@@ -17,12 +20,21 @@ import (
 // @Produce  json
 // @Param req body model.LoginRequest true "Account 账户 Password 将密码进行base64编码后的字符串"
 // @Success 200 {object} model.Response "successful"
-// @Failure 400 {object} model.Response "Unauthentication"
+// @Failure 400 {object} model.Response "errors"
+// @Failure 401 {object} model.Response "Unauthentication"
 // @Failure 500 {object} model.Response "errors!"
 // @Router /auth [post]
 func Login(c *gin.Context) {
 	req := model.LoginRequest{}
-	c.BindJSON(&req)
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "errors in the server",
+			Data:    "null",
+		})
+		log.Println(err)
+		return
+	}
 	if req.Account == "" || req.Password == "" {
 		c.JSON(400, model.Response{
 			Code:    400,
@@ -34,19 +46,50 @@ func Login(c *gin.Context) {
 
 	var user = model.User{}
 
-	if resu := model.MysqlDb.Db.Where("account = ?", req.Account).First(&user); resu.Error != nil {
-		_, err := ccnu.GetUserInfoFormOne(req.Account, req.Password)
-		if err != nil {
-			c.JSON(400, model.Response{
-				Code:    400,
-				Message: "The password or the account is wrong",
+	if err := model.MysqlDb.Db.Where("account = ?", req.Account).First(&user).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+
+			pwd, err := base64.StdEncoding.DecodeString(req.Password)
+			if err != nil {
+				c.JSON(400, model.Response{
+					Code:    400,
+					Message: "invalid coding of base64",
+					Data:    "null",
+				})
+				log.Panicln(err)
+				return
+			}
+			_, err = ccnu.GetUserInfoFormOne(req.Account, string(pwd))
+			if err != nil {
+				c.JSON(400, model.Response{
+					Code:    400,
+					Message: "The password or the account is wrong",
+					Data:    "null",
+				})
+				log.Println(err)
+				return
+			}
+			user.Account = req.Account
+			user.Password = req.Password
+			if err := model.MysqlDb.Db.Create(&user).Error; err != nil {
+
+				c.JSON(500, model.Response{
+					Code:    500,
+					Message: "some errors in the server",
+					Data:    "null",
+				})
+				log.Println(err)
+				return
+			}
+		} else {
+			c.JSON(500, model.Response{
+				Code:    500,
+				Message: "some errors in the server",
 				Data:    "null",
 			})
+			log.Println(err)
 			return
 		}
-		user.Account = req.Account
-		user.Password = req.Password
-		model.MysqlDb.Db.Create(&user)
 	} else {
 
 		if user.Password != req.Password {
@@ -55,29 +98,33 @@ func Login(c *gin.Context) {
 				Message: "The password or the account is wrong",
 				Data:    "null",
 			})
+			log.Println(err)
 			return
 		}
 	}
 
 	model.MysqlDb.Db.Where("account = ?", req.Account).First(&user)
-	tokenstr := token.GenerateToken(user.Id)
-	var result struct {
-		token string
-	}
-	result.token = tokenstr
-	str, err := handler.ObjectToString(result)
+	tokenstr, err := token.GenerateToken(user.Id)
+
 	if err != nil {
+		log.Println(err)
 		c.JSON(500, model.Response{
 			Code:    500,
-			Message: "some errors happened in the server",
-			Data:    "",
+			Message: "errors in the server",
+			Data:    "null",
 		})
-		log.Fatal(err)
+		return
 	}
+
+	type res struct {
+		Token string `json:"token"`
+	}
+	result := res{}
+	result.Token = tokenstr
 	c.JSON(200, model.Response{
 		Code:    200,
 		Message: "ok",
-		Data:    str,
+		Data:    result,
 	})
 
 }

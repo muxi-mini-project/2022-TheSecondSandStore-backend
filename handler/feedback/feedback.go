@@ -8,10 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type FeedbackInfo struct {
-	Content string `json:"content"`
-}
-
 // @Summary 添加反馈
 // @Description 将创建的意见反馈加入数据库中
 // @Tags feedback
@@ -24,7 +20,7 @@ type FeedbackInfo struct {
 // @Failure 401 {object} model.Response "Errors in authentication by token"
 // @Failure 500 {object} model.Response "errors!"
 // @Router /feedback [post]
-func NewOne(c *gin.Context) {
+func CreateFeedback(c *gin.Context) {
 	info := model.FeedbackInfo{}
 	err := c.BindJSON(&info)
 	if err != nil {
@@ -35,8 +31,8 @@ func NewOne(c *gin.Context) {
 		})
 	}
 
-	useridstr := c.Request.Header.Get("userID")
-	userid, err := strconv.Atoi(useridstr)
+	UserIdStr := c.Request.Header.Get("userID")
+	userid, err := strconv.Atoi(UserIdStr)
 	if err != nil {
 		c.JSON(400, model.Response{
 			Code:    400,

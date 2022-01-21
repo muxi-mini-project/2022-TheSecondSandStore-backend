@@ -20,7 +20,7 @@ func LoadRouters(r *gin.Engine) {
 
 	//加载中间件和失败路由
 
-	r.Use(middleware.NoCache)
+	r.Use(middleware.NoCache, middleware.Options, middleware.Secure)
 	r.NoRoute(func(c *gin.Context) {
 		c.String(http.StatusNotFound, "The incorrect API route.")
 	})
@@ -33,7 +33,7 @@ func LoadRouters(r *gin.Engine) {
 
 	authrouter := r.Group("/api/v1/auth")
 	{
-		authrouter.POST("/", auth.Login)
+		authrouter.POST("", auth.Login)
 	}
 
 	userrouter := r.Group("/api/v1/user")
@@ -41,14 +41,14 @@ func LoadRouters(r *gin.Engine) {
 	{
 		userrouter.PUT("/nickname", user.UpdateInfoNickname)
 		userrouter.PUT("/image", user.UpdateInfoImage)
-		userrouter.GET("/", user.GetInfo)
+		userrouter.GET("", user.GetInfo)
 	}
 
 	goodsrouter := r.Group("/api/v1/goods")
 	goodsrouter.Use(middleware.AuthMiddleware)
 	{
 		goodsrouter.PUT("/details/one/:goods_id", goods.UpdateInfo)
-		goodsrouter.POST("/", goods.NewOne)
+		goodsrouter.POST("", goods.NewOne)
 		goodsrouter.GET("/details/all", goods.GetInfoAll)
 		goodsrouter.GET("/details/all/condition/:condition", goods.GetInfoCond)
 		goodsrouter.GET("/details/one/:goods_id", goods.GetInfoId)
@@ -58,22 +58,22 @@ func LoadRouters(r *gin.Engine) {
 	collectionrouter := r.Group("/api/v1/collection")
 	collectionrouter.Use(middleware.AuthMiddleware)
 	{
-		collectionrouter.POST("/", collection.NewOne)
+		collectionrouter.POST("", collection.CreateCollection)
 		collectionrouter.DELETE("/:collection_id", collection.DeleteOne)
-		collectionrouter.GET("/", collection.GetInfo)
+		collectionrouter.GET("", collection.GetInfo)
 	}
 
 	tagrouter := r.Group("/api/v1/tag")
 	tagrouter.Use(middleware.AuthMiddleware)
 	{
-		tagrouter.POST("/", tag.NewOne)
+		tagrouter.POST("", tag.CreateTag)
 		tagrouter.DELETE("/:tag_id", tag.DeleteOne)
-		tagrouter.GET("/", tag.GetInfo)
+		tagrouter.GET("", tag.GetInfo)
 	}
 
 	feedbackrouter := r.Group("/api/v1/feedback")
 	feedbackrouter.Use(middleware.AuthMiddleware)
 	{
-		feedbackrouter.POST("/", feedback.NewOne)
+		feedbackrouter.POST("", feedback.CreateFeedback)
 	}
 }

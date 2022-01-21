@@ -1,13 +1,13 @@
 package tag
 
 import (
+	"log"
+	_ "second/handler"
+	"second/model"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
-
-type TagInfo struct {
-	OwnerId int
-	Content string
-}
 
 // @Summary 添加标签
 // @Description 将创建的标签加入数据库中
@@ -15,12 +15,53 @@ type TagInfo struct {
 // @Accept json
 // @Produce json
 // @Param token header string true "token"
-// @Param info body tag.TagInfo true "TagInfo"
-// @Success 200 "ok,it has been added successfully"
-// @Failure 400 "errors in server"
+// @Param info body model.TagInfo true "TagInfo"
+// @Success 200 {object} model.Response "successful"
+// @Failure 400 {object} model.Response "errors!"
+// @Failure 401 {object} model.Response "Errors in authentication by token"
+// @Failure 500 {object} model.Response "errors!"
 // @Router /tag [post]
-func NewOne(c *gin.Context) {
+func CreateTag(c *gin.Context) {
+	info := model.TagInfo{}
+	err := c.BindJSON(&info)
+	if err != nil {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "some errors in the body of the request",
+			Data:    "null",
+		})
+	}
 
+	UserIdStr := c.Request.Header.Get("userID")
+	userid, err := strconv.Atoi(UserIdStr)
+	if err != nil {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "some errors in the body of the request",
+			Data:    "null",
+		})
+		log.Fatal(err)
+	}
+
+	content := info.Content
+
+	tag := model.Tag{}
+	tag.Content = content
+	tag.OwnerId = userid
+	if err := model.MysqlDb.Db.Create(&tag).Error; err != nil {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "Because of some errors,it has failed to be created",
+			Data:    "null",
+		})
+		log.Fatal(err)
+	}
+
+	c.JSON(200, model.Response{
+		Code:    200,
+		Message: "ok",
+		Data:    "created successfully",
+	})
 }
 
 // @Summary 删除标签
@@ -30,11 +71,37 @@ func NewOne(c *gin.Context) {
 // @Produce json
 // @Param token header string true "token"
 // @Param tag_id path int true " 标签ID"
-// @Success 200 "ok,it has been deleted successfully"
-// @Failure 400 "errors in server"
+// @Success 200 {object} model.Response "successful"
+// @Failure 400 {object} model.Response "errors!"
+// @Failure 401 {object} model.Response "Errors in authentication by token"
+// @Failure 500 {object} model.Response "errors!"
 // @Router /tag/:tag_id [delete]
 func DeleteOne(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("tag_id"))
+	if err != nil {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "some errors in the body of the request",
+			Data:    "null",
+		})
+		log.Fatal(err)
+	}
 
+	tag := model.Tag{}
+	if err := model.MysqlDb.Db.Where("id = ?", id).Delete(tag).Error; err != nil {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "Because of some errors,it has failed to be deleted",
+			Data:    "null",
+		})
+		log.Fatal(err)
+	}
+
+	c.JSON(200, model.Response{
+		Code:    200,
+		Message: "ok",
+		Data:    "null",
+	})
 }
 
 // @Summary 获得标签
@@ -43,9 +110,48 @@ func DeleteOne(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param token header string true "token"
-// @Success 200 "ok,it has been provided successfully"
-// @Failure 400 "errors in server"
+// @Success 200 {object} model.Response "successful"
+// @Failure 400 {object} model.Response "errors!"
+// @Failure 401 {object} model.Response "Errors in authentication by token"
+// @Failure 500 {object} model.Response "errors!"
 // @Router /tag [get]
 func GetInfo(c *gin.Context) {
+	useridstr := c.Request.Header.Get("userID")
+	userid, err := strconv.Atoi(useridstr)
+	if err != nil {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "some errors in the body of the request",
+			Data:    "null",
+		})
+		log.Fatal(err)
+	}
 
+	var tags []model.Tag
+
+	if err := model.MysqlDb.Db.Where("owner_id = ?", userid).Find(&tags).Error; err != nil {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "Because of some errors,it has failed to be deleted",
+			Data:    "null",
+		})
+		log.Fatal(err)
+	}
+
+	var Res []model.TagResponse
+
+	for _, v := range tags {
+		var res = model.TagResponse{}
+
+		res.Content = v.Content
+		res.TagId = v.Id
+
+		Res = append(Res, res)
+	}
+
+	c.JSON(200, model.Response{
+		Code:    200,
+		Message: "ok",
+		Data:    Res,
+	})
 }

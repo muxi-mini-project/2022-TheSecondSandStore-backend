@@ -1,9 +1,9 @@
 package model
 
 type Response struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-	Data    string `json:"data"`
+	Code    int         `json:"code"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
 }
 
 type CollectionResponse struct {
@@ -22,4 +22,14 @@ type GoodsResponse struct {
 	Time         string `json:"time"`
 	Content      string `json:"content"`
 	GoodsImage   string `json:"goods_image"`
+}
+
+type TagResponse struct {
+	TagId   int    `json:"tag_id"`
+	Content string `json:"content"`
+}
+
+type UserResponse struct {
+	Image    string `json:"image"`
+	Nickname string `json:"nickname"`
 }

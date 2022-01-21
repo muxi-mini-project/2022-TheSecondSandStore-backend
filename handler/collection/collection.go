@@ -2,7 +2,7 @@ package collection
 
 import (
 	"log"
-	"second/handler"
+	_ "second/handler"
 	"second/model"
 	"strconv"
 
@@ -21,7 +21,7 @@ import (
 // @Failure 401 {object} model.Response "Errors in authentication by token"
 // @Failure 500 {object} model.Response "errors!"
 // @Router /collection [post]
-func NewOne(c *gin.Context) {
+func CreateCollection(c *gin.Context) {
 	info := model.CollectionInfo{}
 	err := c.BindJSON(&info)
 	if err != nil {
@@ -33,8 +33,8 @@ func NewOne(c *gin.Context) {
 	}
 	goodsid := info.GoodsId
 
-	useridstr := c.Request.Header.Get("userID")
-	userid, err := strconv.Atoi(useridstr)
+	UserIdStr := c.Request.Header.Get("userID")
+	userid, err := strconv.Atoi(UserIdStr)
 	if err != nil {
 		c.JSON(400, model.Response{
 			Code:    400,
@@ -157,8 +157,6 @@ func GetInfo(c *gin.Context) {
 		Res = append(Res, res)
 	}
 
-	str, err := handler.ObjectToString(Res)
-
 	if err != nil {
 		c.JSON(500, model.Response{
 			Code:    500,
@@ -171,6 +169,6 @@ func GetInfo(c *gin.Context) {
 	c.JSON(200, model.Response{
 		Code:    200,
 		Message: "ok",
-		Data:    str,
+		Data:    Res,
 	})
 }

@@ -15,7 +15,7 @@ import (
 // @contact.name rosy
 // @contact.email 2313661940@qq.com
 // @BasePath /api/v1/
-// @Host 127.0.0.1
+// @Host 127.0.0.1:8080
 // @Schemes http
 func main() {
 	config.ConfigInit()
