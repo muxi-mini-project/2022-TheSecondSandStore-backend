@@ -24,7 +24,7 @@ create table `goods`(
    `seller_id` int null comment "卖家id" ,
    `time` varchar(30) null comment "发布时间",
    `description` varchar(5000) null comment "描述",
-   `image` varchar(250) null comment "图片",
+   `images` varchar(250) null comment "图片",
    `tag_ids` varchar(30) null comment "标签串",
    
 -- 添加约束

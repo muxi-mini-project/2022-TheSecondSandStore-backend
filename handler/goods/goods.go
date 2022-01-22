@@ -5,6 +5,7 @@ import (
 	_ "second/handler"
 	"second/model"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -27,6 +28,7 @@ type GoodsInfo struct {
 // @Failure 401 {object} model.Response "Errors in authentication by token"
 // @Failure 500 {object} model.Response "errors!"
 // @Router /goods/details/one/:goods_id [put]
+
 func UpdateInfo(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("goods_id"))
 	if err != nil {
@@ -85,6 +87,7 @@ func UpdateInfo(c *gin.Context) {
 	})
 
 }
+
 */
 // @Summary 获取信息
 // @Description 获取所有商品信息
@@ -116,7 +119,8 @@ func GetInfoAll(c *gin.Context) {
 		var res = model.GoodsResponse{}
 
 		res.Content = v.Description
-		res.GoodsImage = v.Image
+
+		res.GoodsImages = StringToStringSlice(v.Images)
 		res.Time = v.Time
 
 		superuser := &model.SuperUser
@@ -164,7 +168,7 @@ func GetInfoId(c *gin.Context) {
 
 	res := model.GoodsResponse{}
 	res.Content = supergoods.Description
-	res.GoodsImage = supergoods.Image
+	res.GoodsImages = StringToStringSlice(supergoods.Images)
 	res.Time = supergoods.Time
 
 	superuser := &model.SuperUser
@@ -219,7 +223,7 @@ func CreateGoods(c *gin.Context) {
 
 	goods := model.Goods{}
 	goods.SellerId = userid
-	goods.TagIds = info.TagIds
+	goods.TagIds = IntSliceToString(info.TagIds)
 	goods.Time = info.Time
 	goods.Description = info.Description
 	if err := model.MysqlDb.Db.Create(&goods).Error; err != nil {
@@ -235,19 +239,24 @@ func CreateGoods(c *gin.Context) {
 	goods = model.Goods{}
 	model.MysqlDb.Db.Where("seller_id = ?", userid).Order("id DESC").First(&goods)
 
-	src, err := Write(info.Image, goods.Id)
+	src := ""
 
-	if err != nil {
-		c.JSON(400, model.Response{
-			Code:    400,
-			Message: "errors in the image",
-			Data:    "null",
-		})
-		log.Println(err)
-		return
+	for i, v := range info.Images {
+		s, err := Write(v, goods.Id, i+1)
+		if err != nil {
+			c.JSON(400, model.Response{
+				Code:    400,
+				Message: "errors in the image",
+				Data:    "null",
+			})
+			log.Println(err)
+			return
+		}
+		src = src + s + " "
 	}
+	src = strings.TrimRight(src, " ")
 
-	goods.Image = src
+	goods.Images = src
 	model.MysqlDb.Db.Where("id = ?", goods.Id).Save(&goods)
 
 	c.JSON(200, model.Response{
@@ -272,13 +281,33 @@ func CreateGoods(c *gin.Context) {
 func GetInfoCond(c *gin.Context) {
 	condition := c.Param("condition")
 
-	var goods []model.Goods
+	var goodses []model.Goods
 	constr := "%" + condition + "%"
-	model.MysqlDb.Db.Where("description LIKE ?", constr).Find(&goods)
+	model.MysqlDb.Db.Where("description LIKE ?", constr).Find(&goodses)
+
+	var Res []model.GoodsResponse
+
+	for _, v := range goodses {
+		var res = model.GoodsResponse{}
+
+		res.Content = v.Description
+
+		res.GoodsImages = StringToStringSlice(v.Images)
+		res.Time = v.Time
+
+		superuser := &model.SuperUser
+		superuser.AutoUpdate(v.SellerId)
+
+		res.QQAccount = superuser.QQAccount
+		res.UserImage = superuser.Image
+		res.UserNickname = superuser.Nickname
+
+		Res = append(Res, res)
+	}
 
 	c.JSON(200, model.Response{
 		Code:    200,
 		Message: "ok",
-		Data:    goods,
+		Data:    Res,
 	})
 }

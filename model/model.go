@@ -15,7 +15,7 @@ type Goods struct {
 	SellerId    int    `json:"seller_id" gorm:"column:seller_id"`
 	Time        string `json:"time" gorm:"column:time"`
 	Description string `json:"description" gorm:"column:description"`
-	Image       string `json:"image" gorm:"column:image"`
+	Images      string `json:"images" gorm:"column:images"`
 	TagIds      string `json:"tag_ids" gorm:"column:tag_ids"`
 }
 

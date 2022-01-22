@@ -155,7 +155,7 @@ func GetInfo(c *gin.Context) {
 		super.AutoUpdate(goodsid)
 
 		res.Content = super.Description
-		res.GoodsImage = super.Image
+		res.GoodsImages = StringToStringSlice(super.Images)
 		res.Time = super.Time
 		res.QQAccount = superuser.QQAccount
 		res.UserImage = superuser.Image

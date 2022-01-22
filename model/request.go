@@ -14,10 +14,10 @@ type FeedbackInfo struct {
 }
 
 type GoodsInfo struct {
-	Description string `json:"description"`
-	Image       string `json:"image"`
-	TagIds      string `json:"tag_ids"`
-	Time        string `json:"time"`
+	Description string   `json:"description"`
+	Images      []string `json:"images"`
+	TagIds      []int    `json:"tag_ids"`
+	Time        string   `json:"time"`
 }
 
 type TagInfo struct {

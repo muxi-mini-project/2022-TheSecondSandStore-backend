@@ -10,13 +10,13 @@ import (
 	"github.com/spf13/viper"
 )
 
-func Write(EncodeStr string, goodsid int) (string, error) {
+func Write(EncodeStr string, goodsid int, id int) (string, error) {
 	imageBytes, err := base64.StdEncoding.DecodeString(EncodeStr)
 	if err != nil {
 		return "", err
 	}
 
-	path := fmt.Sprintf("/static/goods/%d.jpg", goodsid)
+	path := fmt.Sprintf("/static/goods/%d.%d.jpg", goodsid, id)
 
 	ioutil.WriteFile("."+path, imageBytes, 0777)
 

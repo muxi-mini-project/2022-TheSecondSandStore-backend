@@ -7,21 +7,21 @@ type Response struct {
 }
 
 type CollectionResponse struct {
-	UserImage    string `json:"user_image"`
-	UserNickname string `json:"user_nickname"`
-	QQAccount    string `json:"qq_account"`
-	Time         string `json:"time"`
-	Content      string `json:"content"`
-	GoodsImage   string `json:"goods_image"`
+	UserImage    string   `json:"user_image"`
+	UserNickname string   `json:"user_nickname"`
+	QQAccount    string   `json:"qq_account"`
+	Time         string   `json:"time"`
+	Content      string   `json:"content"`
+	GoodsImages  []string `json:"goods_images"`
 }
 
 type GoodsResponse struct {
-	UserImage    string `json:"user_image"`
-	UserNickname string `json:"user_nickname"`
-	QQAccount    string `json:"qq_account"`
-	Time         string `json:"time"`
-	Content      string `json:"content"`
-	GoodsImage   string `json:"goods_image"`
+	UserImage    string   `json:"user_image"`
+	UserNickname string   `json:"user_nickname"`
+	QQAccount    string   `json:"qq_account"`
+	Time         string   `json:"time"`
+	Content      string   `json:"content"`
+	GoodsImages  []string `json:"goods_images"`
 }
 
 type TagResponse struct {
