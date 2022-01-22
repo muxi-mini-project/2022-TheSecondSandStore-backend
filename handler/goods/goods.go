@@ -13,6 +13,7 @@ type GoodsInfo struct {
 	BuyerId string `json:"buyer_id"`
 }
 
+/*
 // @Summary 更新信息
 // @Description 修改商品信息
 // @Tags goods
@@ -34,7 +35,8 @@ func UpdateInfo(c *gin.Context) {
 			Message: "some errors in the body of the request",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	info := model.GoodsInfo{}
@@ -45,7 +47,8 @@ func UpdateInfo(c *gin.Context) {
 			Message: "some errors in the body of the request",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	goods := model.Goods{}
@@ -56,7 +59,8 @@ func UpdateInfo(c *gin.Context) {
 			Message: "Because of some errors,it has failed to be found",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	goods.Image = info.Image
@@ -70,7 +74,8 @@ func UpdateInfo(c *gin.Context) {
 			Message: "Because of some errors,it has failed to be saved",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	c.JSON(200, model.Response{
@@ -80,7 +85,7 @@ func UpdateInfo(c *gin.Context) {
 	})
 
 }
-
+*/
 // @Summary 获取信息
 // @Description 获取所有商品信息
 // @Tags goods
@@ -101,7 +106,8 @@ func GetInfoAll(c *gin.Context) {
 			Message: "Because of some errors,it has failed to be deleted",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	var Res []model.GoodsResponse
@@ -118,7 +124,7 @@ func GetInfoAll(c *gin.Context) {
 
 		res.QQAccount = superuser.QQAccount
 		res.UserImage = superuser.Image
-		res.UserNickname = superuser.NickName
+		res.UserNickname = superuser.Nickname
 
 		Res = append(Res, res)
 	}
@@ -149,7 +155,8 @@ func GetInfoId(c *gin.Context) {
 			Message: "some errors in the body of the request",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	supergoods := &model.SuperGoods
@@ -165,7 +172,7 @@ func GetInfoId(c *gin.Context) {
 
 	res.QQAccount = superuser.QQAccount
 	res.UserImage = superuser.Image
-	res.UserNickname = superuser.NickName
+	res.UserNickname = superuser.Nickname
 
 	c.JSON(200, model.Response{
 		Code:    200,
@@ -186,7 +193,7 @@ func GetInfoId(c *gin.Context) {
 // @Failure 401 {object} model.Response "Errors in authentication by token"
 // @Failure 500 {object} model.Response "errors!"
 // @Router /goods [post]
-func NewOne(c *gin.Context) {
+func CreateGoods(c *gin.Context) {
 	info := model.GoodsInfo{}
 	err := c.BindJSON(&info)
 	if err != nil {
@@ -195,22 +202,23 @@ func NewOne(c *gin.Context) {
 			Message: "some errors in the body of the request",
 			Data:    "null",
 		})
+		log.Println(err)
+		return
 	}
 
-	UserIdStr := c.Request.Header.Get("userID")
-	userid, err := strconv.Atoi(UserIdStr)
-	if err != nil {
-		c.JSON(400, model.Response{
-			Code:    400,
-			Message: "some errors in the body of the request",
+	UserId, ok := c.Get("userID")
+	if !ok {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "errors in the server",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		return
 	}
+	userid := UserId.(int)
 
 	goods := model.Goods{}
 	goods.SellerId = userid
-	goods.Image = info.Image
 	goods.TagIds = info.TagIds
 	goods.Time = info.Time
 	goods.Description = info.Description
@@ -220,8 +228,27 @@ func NewOne(c *gin.Context) {
 			Message: "Because of some errors,it has failed to be created",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
+
+	goods = model.Goods{}
+	model.MysqlDb.Db.Where("seller_id = ?", userid).Order("id DESC").First(&goods)
+
+	src, err := Write(info.Image, goods.Id)
+
+	if err != nil {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "errors in the image",
+			Data:    "null",
+		})
+		log.Println(err)
+		return
+	}
+
+	goods.Image = src
+	model.MysqlDb.Db.Where("id = ?", goods.Id).Save(&goods)
 
 	c.JSON(200, model.Response{
 		Code:    200,

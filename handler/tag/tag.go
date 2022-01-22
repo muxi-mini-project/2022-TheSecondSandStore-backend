@@ -30,18 +30,20 @@ func CreateTag(c *gin.Context) {
 			Message: "some errors in the body of the request",
 			Data:    "null",
 		})
+		log.Println(err)
+		return
 	}
 
-	UserIdStr := c.Request.Header.Get("userID")
-	userid, err := strconv.Atoi(UserIdStr)
-	if err != nil {
-		c.JSON(400, model.Response{
-			Code:    400,
-			Message: "some errors in the body of the request",
+	UserId, ok := c.Get("userID")
+	if !ok {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "errors in the server",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		return
 	}
+	userid := UserId.(int)
 
 	content := info.Content
 
@@ -54,7 +56,8 @@ func CreateTag(c *gin.Context) {
 			Message: "Because of some errors,it has failed to be created",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	c.JSON(200, model.Response{
@@ -84,7 +87,8 @@ func DeleteOne(c *gin.Context) {
 			Message: "some errors in the body of the request",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	tag := model.Tag{}
@@ -94,7 +98,8 @@ func DeleteOne(c *gin.Context) {
 			Message: "Because of some errors,it has failed to be deleted",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	c.JSON(200, model.Response{
@@ -116,16 +121,16 @@ func DeleteOne(c *gin.Context) {
 // @Failure 500 {object} model.Response "errors!"
 // @Router /tag [get]
 func GetInfo(c *gin.Context) {
-	useridstr := c.Request.Header.Get("userID")
-	userid, err := strconv.Atoi(useridstr)
-	if err != nil {
-		c.JSON(400, model.Response{
-			Code:    400,
-			Message: "some errors in the body of the request",
+	UserId, ok := c.Get("userID")
+	if !ok {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "errors in the server",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		return
 	}
+	userid := UserId.(int)
 
 	var tags []model.Tag
 
@@ -135,7 +140,8 @@ func GetInfo(c *gin.Context) {
 			Message: "Because of some errors,it has failed to be deleted",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	var Res []model.TagResponse

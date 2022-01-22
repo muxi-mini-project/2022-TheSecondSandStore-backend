@@ -1,13 +1,14 @@
 package auth
 
 import (
-	"errors"
+	_ "errors"
 
-	"second/pkg/token"
+	_ "second/pkg/token"
 
-	"github.com/gin-gonic/gin"
+	_ "github.com/gin-gonic/gin"
 )
 
+/*
 var (
 	ErrMissingHeader = errors.New("The length of the `Authorization` header is zero.")
 
@@ -44,3 +45,4 @@ func ParseRequest(c *gin.Context) (*Context, error) {
 
 	return Parse(header)
 }
+*/

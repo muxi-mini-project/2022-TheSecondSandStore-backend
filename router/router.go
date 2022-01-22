@@ -29,6 +29,10 @@ func LoadRouters(r *gin.Engine) {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	//加载静态文件
+
+	r.StaticFS("/static", http.Dir("./static"))
+
 	//路由
 
 	authrouter := r.Group("/api/v1/auth")
@@ -47,8 +51,8 @@ func LoadRouters(r *gin.Engine) {
 	goodsrouter := r.Group("/api/v1/goods")
 	goodsrouter.Use(middleware.AuthMiddleware)
 	{
-		goodsrouter.PUT("/details/one/:goods_id", goods.UpdateInfo)
-		goodsrouter.POST("", goods.NewOne)
+		//goodsrouter.PUT("/details/one/:goods_id", goods.UpdateInfo)
+		goodsrouter.POST("", goods.CreateGoods)
 		goodsrouter.GET("/details/all", goods.GetInfoAll)
 		goodsrouter.GET("/details/all/condition/:condition", goods.GetInfoCond)
 		goodsrouter.GET("/details/one/:goods_id", goods.GetInfoId)

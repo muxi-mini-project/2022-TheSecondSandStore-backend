@@ -18,12 +18,12 @@ primary key (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 -- 商品
-create table `goodses`(
+create table `goods`(
    `id` int not null AUTO_INCREMENT comment "商品id" ,
    `buyer_id` int null comment "买家id" ,
    `seller_id` int null comment "卖家id" ,
    `time` varchar(30) null comment "发布时间",
-   `description` varchar(100) null comment "描述",
+   `description` varchar(5000) null comment "描述",
    `image` varchar(250) null comment "图片",
    `tag_ids` varchar(30) null comment "标签串",
    
@@ -55,7 +55,7 @@ primary key (`id`)
 create table `feedbacks`(
    `id` int not null AUTO_INCREMENT comment "意见反馈项id" ,
    `owner_id` int null comment "用户id" ,
-   `content` varchar(100) null comment "反馈内容",
+   `content` varchar(5000) null comment "反馈内容",
 
 -- 添加约束
 primary key (`id`)

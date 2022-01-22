@@ -3,7 +3,7 @@ package model
 type User struct {
 	Id        int    `json:"id" gorm:"column:id"`
 	Account   string `json:"account" gorm:"column:account"`
-	NickName  string `json:"nickname" gorm:"column:nickname"`
+	Nickname  string `json:"nickname" gorm:"column:nickname"`
 	Password  string `json:"password" gorm:"column:password"`
 	Image     string `json:"image" gorm:"column:image"`
 	QQAccount string `json:"qq_account" gorm:"column:qq_account"`

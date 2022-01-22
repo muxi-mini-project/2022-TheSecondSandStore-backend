@@ -3,7 +3,7 @@ package feedback
 import (
 	"log"
 	"second/model"
-	"strconv"
+	_ "strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -29,18 +29,20 @@ func CreateFeedback(c *gin.Context) {
 			Message: "some errors in the body of the request",
 			Data:    "null",
 		})
+		log.Println(err)
+		return
 	}
 
-	UserIdStr := c.Request.Header.Get("userID")
-	userid, err := strconv.Atoi(UserIdStr)
-	if err != nil {
-		c.JSON(400, model.Response{
-			Code:    400,
-			Message: "some errors in the body of the request",
+	UserId, ok := c.Get("userID")
+	if !ok {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "errors in the server",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		return
 	}
+	userid := UserId.(int)
 
 	content := info.Content
 
@@ -53,7 +55,8 @@ func CreateFeedback(c *gin.Context) {
 			Message: "Because of some errors,it has failed to be created",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	c.JSON(200, model.Response{

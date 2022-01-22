@@ -21,10 +21,10 @@ type GoodsInfo struct {
 }
 
 type TagInfo struct {
-	Content string
+	Content string `json:"content"`
 }
 
 type UserInfo struct {
-	Image    string
-	NickName string
+	Image    string `json:"image"`
+	Nickname string `json:"nickname"`
 }

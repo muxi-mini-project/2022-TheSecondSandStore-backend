@@ -4,7 +4,7 @@ import (
 	"log"
 	_ "second/handler"
 	"second/model"
-	"strconv"
+	_ "strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -40,9 +40,17 @@ func GetInfo(c *gin.Context) {
 
 	superuser := &model.SuperUser
 	superuser.AutoUpdate(userid)
+	if superuser.Image == "" {
+		res.Image = DefaultImage()
+	} else {
+		res.Image = superuser.Image
+	}
 
-	res.Image = superuser.Image
-	res.Nickname = superuser.NickName
+	if superuser.Nickname == "" {
+		res.Nickname = DefaultNickname(userid)
+	} else {
+		res.Nickname = superuser.Nickname
+	}
 
 	c.JSON(200, model.Response{
 		Code:    200,
@@ -72,22 +80,45 @@ func UpdateInfoImage(c *gin.Context) {
 			Message: "some errors in the body of the request",
 			Data:    "null",
 		})
+		log.Println(err)
+		return
 	}
 
-	UserIdStr := c.Request.Header.Get("userID")
-	userid, err := strconv.Atoi(UserIdStr)
-	if err != nil {
-		c.JSON(400, model.Response{
-			Code:    400,
-			Message: "some errors in the body of the request",
+	UserId, ok := c.Get("userID")
+	if !ok {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "errors in the server",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		return
 	}
+	userid := UserId.(int)
 
 	user := model.User{}
 	model.MysqlDb.Db.Where("id = ?", userid).First(&user)
-	user.Image = info.Image
+	if info.Image == "" {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "image in the body of your request is lost",
+			Data:    "null",
+		})
+		return
+	}
+
+	src, err := Write(info.Image, userid)
+
+	if err != nil {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "errors in the image",
+			Data:    "null",
+		})
+		log.Println(err)
+		return
+	}
+
+	user.Image = src
 	model.MysqlDb.Db.Where("id = ?", userid).Save(&user)
 
 	c.JSON(200, model.Response{
@@ -120,20 +151,28 @@ func UpdateInfoNickname(c *gin.Context) {
 		})
 	}
 
-	UserIdStr := c.Request.Header.Get("userID")
-	userid, err := strconv.Atoi(UserIdStr)
-	if err != nil {
-		c.JSON(400, model.Response{
-			Code:    400,
-			Message: "some errors in the body of the request",
+	UserId, ok := c.Get("userID")
+	if !ok {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "errors in the server",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		return
 	}
+	userid := UserId.(int)
 
 	user := model.User{}
 	model.MysqlDb.Db.Where("id = ?", userid).First(&user)
-	user.NickName = info.NickName
+	if info.Nickname == "" {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "the nickname in the body of your request is lost",
+			Data:    "null",
+		})
+		return
+	}
+	user.Nickname = info.Nickname
 	model.MysqlDb.Db.Where("id = ?", userid).Save(&user)
 
 	c.JSON(200, model.Response{

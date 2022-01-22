@@ -30,19 +30,22 @@ func CreateCollection(c *gin.Context) {
 			Message: "some errors in the body of the request",
 			Data:    "null",
 		})
+		log.Println(err)
+		return
 	}
 	goodsid := info.GoodsId
 
-	UserIdStr := c.Request.Header.Get("userID")
-	userid, err := strconv.Atoi(UserIdStr)
-	if err != nil {
-		c.JSON(400, model.Response{
-			Code:    400,
-			Message: "some errors in the body of the request",
+	UserId, ok := c.Get("userID")
+	if !ok {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "errors in the server",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		return
 	}
+	userid := UserId.(int)
+
 	collection := model.Collection{}
 	collection.GoodsId = goodsid
 	collection.OwnerId = userid
@@ -52,7 +55,8 @@ func CreateCollection(c *gin.Context) {
 			Message: "Because of some errors,it has failed to be created",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	c.JSON(200, model.Response{
 		Code:    200,
@@ -82,7 +86,8 @@ func DeleteOne(c *gin.Context) {
 			Message: "some errors in the body of the request",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	collection := model.Collection{}
 	if err := model.MysqlDb.Db.Where("id = ?", id).Delete(collection).Error; err != nil {
@@ -91,7 +96,8 @@ func DeleteOne(c *gin.Context) {
 			Message: "Because of some errors,it has failed to be deleted",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	c.JSON(200, model.Response{
@@ -113,16 +119,16 @@ func DeleteOne(c *gin.Context) {
 // @Failure 500 {object} model.Response "errors!"
 // @Router /collection [get]
 func GetInfo(c *gin.Context) {
-	useridstr := c.Request.Header.Get("userID")
-	userid, err := strconv.Atoi(useridstr)
-	if err != nil {
-		c.JSON(400, model.Response{
-			Code:    400,
-			Message: "some errors in the body of the request",
+	UserId, ok := c.Get("userID")
+	if !ok {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "errors in the server",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		return
 	}
+	userid := UserId.(int)
 
 	var collections []model.Collection
 
@@ -132,7 +138,8 @@ func GetInfo(c *gin.Context) {
 			Message: "Because of some errors,it has failed to be deleted",
 			Data:    "null",
 		})
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	var Res []model.CollectionResponse
@@ -152,18 +159,9 @@ func GetInfo(c *gin.Context) {
 		res.Time = super.Time
 		res.QQAccount = superuser.QQAccount
 		res.UserImage = superuser.Image
-		res.UserNickname = superuser.NickName
+		res.UserNickname = superuser.Nickname
 
 		Res = append(Res, res)
-	}
-
-	if err != nil {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "some errors happened in the server",
-			Data:    "",
-		})
-		log.Fatal(err)
 	}
 
 	c.JSON(200, model.Response{

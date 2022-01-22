@@ -81,6 +81,8 @@ func Login(c *gin.Context) {
 				log.Println(err)
 				return
 			}
+			model.MysqlDb.Db.Where("account = ?", req.Account).First(&user)
+			Init(user.Id, req.Account)
 		} else {
 			c.JSON(500, model.Response{
 				Code:    500,
@@ -104,27 +106,22 @@ func Login(c *gin.Context) {
 	}
 
 	model.MysqlDb.Db.Where("account = ?", req.Account).First(&user)
-	tokenstr, err := token.GenerateToken(user.Id)
+	err := token.Signin(c, user.Id, req.Account)
 
 	if err != nil {
-		log.Println(err)
 		c.JSON(500, model.Response{
 			Code:    500,
-			Message: "errors in the server",
+			Message: "Failed to generate token",
 			Data:    "null",
 		})
+		log.Println(err)
 		return
 	}
 
-	type res struct {
-		Token string `json:"token"`
-	}
-	result := res{}
-	result.Token = tokenstr
 	c.JSON(200, model.Response{
 		Code:    200,
 		Message: "ok",
-		Data:    result,
+		Data:    "successful",
 	})
 
 }
