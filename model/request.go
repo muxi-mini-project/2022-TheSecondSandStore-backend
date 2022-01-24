@@ -16,8 +16,10 @@ type FeedbackInfo struct {
 type GoodsInfo struct {
 	Description string   `json:"description"`
 	Images      []string `json:"images"`
+	Videos      []string `json:"videos"`
 	TagIds      []int    `json:"tag_ids"`
 	Time        string   `json:"time"`
+	QQAccount   string   `json:"qq_account"`
 }
 
 type TagInfo struct {

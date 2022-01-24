@@ -76,3 +76,23 @@ func (Super *Collection) AutoUpdate(id int) {
 	MysqlDb.Db.Where("id = ?", id).First(&collection)
 	*Super = collection
 }
+
+func (Super *User) Save() {
+	MysqlDb.Db.Where("id = ?", Super.Id).Save(Super)
+}
+
+func (Super *Tag) Save() {
+	MysqlDb.Db.Where("id = ?", Super.Id).Save(Super)
+}
+
+func (Super *Goods) Save() {
+	MysqlDb.Db.Where("id = ?", Super.Id).Save(Super)
+}
+
+func (Super *Feedback) Save() {
+	MysqlDb.Db.Where("id = ?", Super.Id).Save(Super)
+}
+
+func (Super *Collection) Save() {
+	MysqlDb.Db.Where("id = ?", Super.Id).Save(Super)
+}

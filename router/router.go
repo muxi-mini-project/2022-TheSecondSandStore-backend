@@ -46,6 +46,9 @@ func LoadRouters(r *gin.Engine) {
 		userrouter.PUT("/nickname", user.UpdateInfoNickname)
 		userrouter.PUT("/image", user.UpdateInfoImage)
 		userrouter.GET("", user.GetInfo)
+		userrouter.GET("/goods", user.GetGoodsInfo)
+		userrouter.DELETE("/goods/:goods_id", user.DelGoods)
+		userrouter.PUT("/goods/:goods_id", user.SellGoods)
 	}
 
 	goodsrouter := r.Group("/api/v1/goods")

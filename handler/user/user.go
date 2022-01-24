@@ -4,7 +4,7 @@ import (
 	"log"
 	_ "second/handler"
 	"second/model"
-	_ "strconv"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -180,4 +180,136 @@ func UpdateInfoNickname(c *gin.Context) {
 		Message: "ok",
 		Data:    "successful",
 	})
+}
+
+// @Summary 获得用户发布的商品信息
+// @Description 获取用户发布的商品信息
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param token header string true "token"
+// @Success 200 {object} model.Response "successful"
+// @Failure 400 {object} model.Response "errors!"
+// @Failure 401 {object} model.Response "Errors in authentication by token"
+// @Failure 500 {object} model.Response "errors!"
+// @Router /user/goods [get]
+func GetGoodsInfo(c *gin.Context) {
+	UserId, ok := c.Get("userID")
+	if !ok {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "errors in the server",
+			Data:    "null",
+		})
+	}
+	userid := UserId.(int)
+
+	var goodses []model.Goods
+	if err := model.MysqlDb.Db.Where("seller_id = ?", userid).Find(&goodses).Error; err != nil {
+		c.JSON(200, model.Response{
+			Code:    200,
+			Message: "ok,empty",
+			Data:    nil,
+		})
+		return
+	}
+
+	var Res []model.GoodsResponse
+
+	for _, v := range goodses {
+		var res = model.GoodsResponse{}
+
+		res.Content = v.Description
+
+		res.GoodsImagesVideos = StringToStringSlice(v.ImagesVideos)
+		res.Time = v.Time
+		res.IfSell = v.IfSell
+		res.IfDel = v.IfDel
+
+		superuser := &model.SuperUser
+		superuser.AutoUpdate(v.SellerId)
+
+		res.QQAccount = superuser.QQAccount
+		res.UserImage = superuser.Image
+		res.UserNickname = superuser.Nickname
+
+		Res = append(Res, res)
+	}
+
+	c.JSON(200, model.Response{
+		Code:    200,
+		Message: "ok",
+		Data:    Res,
+	})
+}
+
+// @Summary 删除用户发布的商品信息
+// @Description 删除用户发布的商品信息
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param token header string true "token"
+// @Success 200 {object} model.Response "successful"
+// @Failure 400 {object} model.Response "errors!"
+// @Failure 401 {object} model.Response "Errors in authentication by token"
+// @Failure 500 {object} model.Response "errors!"
+// @Router /user/goods/:goods_id [delete]
+func DelGoods(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("goods_id"))
+	if err != nil {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "some errors in the body of the request",
+			Data:    "null",
+		})
+		log.Println(err)
+		return
+	}
+
+	super := &model.SuperGoods
+	super.AutoUpdate(id)
+	super.IfDel = true
+	super.Save()
+
+	c.JSON(200, model.Response{
+		Code:    200,
+		Message: "ok",
+		Data:    "successful",
+	})
+}
+
+// @Summary 用户确认卖出商品
+// @Description 用户确认卖出商品
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param token header string true "token"
+// @Success 200 {object} model.Response "successful"
+// @Failure 400 {object} model.Response "errors!"
+// @Failure 401 {object} model.Response "Errors in authentication by token"
+// @Failure 500 {object} model.Response "errors!"
+// @Router /user/goods/:goods_id [put]
+func SellGoods(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("goods_id"))
+	if err != nil {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "some errors in the body of the request",
+			Data:    "null",
+		})
+		log.Println(err)
+		return
+	}
+
+	super := &model.SuperGoods
+	super.AutoUpdate(id)
+	super.IfSell = true
+	super.Save()
+
+	c.JSON(200, model.Response{
+		Code:    200,
+		Message: "ok",
+		Data:    "successful",
+	})
+
 }

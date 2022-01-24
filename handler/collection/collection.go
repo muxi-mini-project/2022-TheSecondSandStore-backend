@@ -103,7 +103,7 @@ func DeleteOne(c *gin.Context) {
 	c.JSON(200, model.Response{
 		Code:    200,
 		Message: "ok",
-		Data:    "null",
+		Data:    nil,
 	})
 }
 
@@ -133,12 +133,11 @@ func GetInfo(c *gin.Context) {
 	var collections []model.Collection
 
 	if err := model.MysqlDb.Db.Where("owner_id = ?", userid).Find(&collections).Error; err != nil {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "Because of some errors,it has failed to be deleted",
-			Data:    "null",
+		c.JSON(200, model.Response{
+			Code:    200,
+			Message: "ok,empty",
+			Data:    nil,
 		})
-		log.Println(err)
 		return
 	}
 
@@ -155,8 +154,11 @@ func GetInfo(c *gin.Context) {
 		super.AutoUpdate(goodsid)
 
 		res.Content = super.Description
-		res.GoodsImages = StringToStringSlice(super.Images)
+		res.GoodsImagesVideos = StringToStringSlice(super.ImagesVideos)
 		res.Time = super.Time
+		res.IfDel = super.IfDel
+		res.IfSell = super.IfSell
+
 		res.QQAccount = superuser.QQAccount
 		res.UserImage = superuser.Image
 		res.UserNickname = superuser.Nickname

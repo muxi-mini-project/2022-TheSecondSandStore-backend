@@ -10,13 +10,15 @@ type User struct {
 }
 
 type Goods struct {
-	Id          int    `json:"id" gorm:"column:id"`
-	BuyerId     int    `json:"buyer_id" gorm:"column:buyer_id"`
-	SellerId    int    `json:"seller_id" gorm:"column:seller_id"`
-	Time        string `json:"time" gorm:"column:time"`
-	Description string `json:"description" gorm:"column:description"`
-	Images      string `json:"images" gorm:"column:images"`
-	TagIds      string `json:"tag_ids" gorm:"column:tag_ids"`
+	Id           int    `json:"id" gorm:"column:id"`
+	BuyerId      int    `json:"buyer_id" gorm:"column:buyer_id"`
+	SellerId     int    `json:"seller_id" gorm:"column:seller_id"`
+	Time         string `json:"time" gorm:"column:time"`
+	Description  string `json:"description" gorm:"column:description"`
+	ImagesVideos string `json:"images_videos" gorm:"column:images_videos"`
+	TagIds       string `json:"tag_ids" gorm:"column:tag_ids"`
+	IfSell       bool   `json:"if_sell" gorm:"column:if_sell"`
+	IfDel        bool   `json:"if_del" gorm:"column:if_del"`
 }
 
 type Tag struct {

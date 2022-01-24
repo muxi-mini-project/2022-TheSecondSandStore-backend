@@ -7,21 +7,26 @@ type Response struct {
 }
 
 type CollectionResponse struct {
-	UserImage    string   `json:"user_image"`
-	UserNickname string   `json:"user_nickname"`
-	QQAccount    string   `json:"qq_account"`
-	Time         string   `json:"time"`
-	Content      string   `json:"content"`
-	GoodsImages  []string `json:"goods_images"`
+	UserImage         string   `json:"user_image"`
+	UserNickname      string   `json:"user_nickname"`
+	QQAccount         string   `json:"qq_account"`
+	Time              string   `json:"time"`
+	Content           string   `json:"content"`
+	GoodsImagesVideos []string `json:"goods_images_videos"`
+	IfSell            bool     `json:"if_sell"`
+	IfDel             bool     `json:"if_del"`
 }
 
 type GoodsResponse struct {
-	UserImage    string   `json:"user_image"`
-	UserNickname string   `json:"user_nickname"`
-	QQAccount    string   `json:"qq_account"`
-	Time         string   `json:"time"`
-	Content      string   `json:"content"`
-	GoodsImages  []string `json:"goods_images"`
+	UserImage         string   `json:"user_image"`
+	UserNickname      string   `json:"user_nickname"`
+	QQAccount         string   `json:"qq_account"`
+	Time              string   `json:"time"`
+	Content           string   `json:"content"`
+	GoodsImagesVideos []string `json:"goods_images_videos"`
+	IfSell            bool     `json:"if_sell"`
+	IfDel             bool     `json:"if_del"`
+	IfCollected       bool     `json:"if_collected"`
 }
 
 type TagResponse struct {

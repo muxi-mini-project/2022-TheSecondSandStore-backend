@@ -105,7 +105,7 @@ func DeleteOne(c *gin.Context) {
 	c.JSON(200, model.Response{
 		Code:    200,
 		Message: "ok",
-		Data:    "null",
+		Data:    nil,
 	})
 }
 
@@ -135,12 +135,11 @@ func GetInfo(c *gin.Context) {
 	var tags []model.Tag
 
 	if err := model.MysqlDb.Db.Where("owner_id = ?", userid).Find(&tags).Error; err != nil {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "Because of some errors,it has failed to be deleted",
-			Data:    "null",
+		c.JSON(200, model.Response{
+			Code:    200,
+			Message: "ok,empty",
+			Data:    nil,
 		})
-		log.Println(err)
 		return
 	}
 

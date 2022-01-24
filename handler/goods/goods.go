@@ -89,6 +89,7 @@ func UpdateInfo(c *gin.Context) {
 }
 
 */
+
 // @Summary 获取信息
 // @Description 获取所有商品信息
 // @Tags goods
@@ -103,15 +104,26 @@ func UpdateInfo(c *gin.Context) {
 func GetInfoAll(c *gin.Context) {
 	var goodses []model.Goods
 
-	if err := model.MysqlDb.Db.Order("id DESC").Find(&goodses).Error; err != nil {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "Because of some errors,it has failed to be deleted",
-			Data:    "null",
+	if err := model.MysqlDb.Db.Order("id DESC").Where("if_del = ?", false).Where("if_sell = ?", false).Find(&goodses).Error; err != nil {
+		c.JSON(200, model.Response{
+			Code:    200,
+			Message: "ok,empty",
+			Data:    nil,
 		})
-		log.Println(err)
 		return
 	}
+
+	UserId, ok := c.Get("userID")
+	if !ok {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "errors in the server",
+			Data:    "null",
+		})
+		return
+	}
+
+	userid := UserId.(int)
 
 	var Res []model.GoodsResponse
 
@@ -120,11 +132,14 @@ func GetInfoAll(c *gin.Context) {
 
 		res.Content = v.Description
 
-		res.GoodsImages = StringToStringSlice(v.Images)
+		res.GoodsImagesVideos = StringToStringSlice(v.ImagesVideos)
 		res.Time = v.Time
-
+		res.IfDel = v.IfDel
+		res.IfSell = v.IfSell
 		superuser := &model.SuperUser
 		superuser.AutoUpdate(v.SellerId)
+
+		res.IfCollected = Search(userid, v.Id)
 
 		res.QQAccount = superuser.QQAccount
 		res.UserImage = superuser.Image
@@ -163,13 +178,28 @@ func GetInfoId(c *gin.Context) {
 		return
 	}
 
+	UserId, ok := c.Get("userID")
+	if !ok {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "errors in the server",
+			Data:    "null",
+		})
+		return
+	}
+
+	userid := UserId.(int)
+
 	supergoods := &model.SuperGoods
 	supergoods.AutoUpdate(id)
 
 	res := model.GoodsResponse{}
 	res.Content = supergoods.Description
-	res.GoodsImages = StringToStringSlice(supergoods.Images)
+	res.GoodsImagesVideos = StringToStringSlice(supergoods.ImagesVideos)
 	res.Time = supergoods.Time
+	res.IfDel = supergoods.IfDel
+	res.IfSell = supergoods.IfDel
+	res.IfCollected = Search(userid, supergoods.Id)
 
 	superuser := &model.SuperUser
 	superuser.AutoUpdate(supergoods.SellerId)
@@ -221,11 +251,21 @@ func CreateGoods(c *gin.Context) {
 	}
 	userid := UserId.(int)
 
+	//
+
+	superuser := &model.SuperUser
+	superuser.AutoUpdate(userid)
+	superuser.QQAccount = info.QQAccount
+
+	superuser.Save()
+
 	goods := model.Goods{}
 	goods.SellerId = userid
 	goods.TagIds = IntSliceToString(info.TagIds)
 	goods.Time = info.Time
 	goods.Description = info.Description
+	goods.IfSell = false
+	goods.IfDel = false
 	if err := model.MysqlDb.Db.Create(&goods).Error; err != nil {
 		c.JSON(500, model.Response{
 			Code:    500,
@@ -242,7 +282,7 @@ func CreateGoods(c *gin.Context) {
 	src := ""
 
 	for i, v := range info.Images {
-		s, err := Write(v, goods.Id, i+1)
+		s, err := Write(v, goods.Id, i+1, "jpg")
 		if err != nil {
 			c.JSON(400, model.Response{
 				Code:    400,
@@ -256,7 +296,24 @@ func CreateGoods(c *gin.Context) {
 	}
 	src = strings.TrimRight(src, " ")
 
-	goods.Images = src
+	srcs := ""
+	for i, v := range info.Videos {
+		s, err := Write(v, goods.Id, i+1, "mp4")
+		if err != nil {
+			c.JSON(400, model.Response{
+				Code:    400,
+				Message: "errors in the videos",
+				Data:    "null",
+			})
+			log.Println(err)
+			return
+		}
+		srcs = srcs + s + " "
+	}
+	srcs = strings.TrimRight(srcs, " ")
+
+	goods.ImagesVideos = src + " " + srcs
+
 	model.MysqlDb.Db.Where("id = ?", goods.Id).Save(&goods)
 
 	c.JSON(200, model.Response{
@@ -281,9 +338,20 @@ func CreateGoods(c *gin.Context) {
 func GetInfoCond(c *gin.Context) {
 	condition := c.Param("condition")
 
+	UserId, ok := c.Get("userID")
+	if !ok {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "errors in the server",
+			Data:    "null",
+		})
+		return
+	}
+	userid := UserId.(int)
+
 	var goodses []model.Goods
 	constr := "%" + condition + "%"
-	model.MysqlDb.Db.Where("description LIKE ?", constr).Find(&goodses)
+	model.MysqlDb.Db.Where("description LIKE ?", constr).Where("if_del = ?", false).Where("if_sell = ?", false).Find(&goodses)
 
 	var Res []model.GoodsResponse
 
@@ -292,8 +360,11 @@ func GetInfoCond(c *gin.Context) {
 
 		res.Content = v.Description
 
-		res.GoodsImages = StringToStringSlice(v.Images)
+		res.GoodsImagesVideos = StringToStringSlice(v.ImagesVideos)
 		res.Time = v.Time
+		res.IfDel = v.IfDel
+		res.IfSell = v.IfSell
+		res.IfCollected = Search(userid, v.Id)
 
 		superuser := &model.SuperUser
 		superuser.AutoUpdate(v.SellerId)

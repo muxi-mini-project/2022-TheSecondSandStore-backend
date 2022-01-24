@@ -4,6 +4,8 @@ create database `second`;
 
 use `second`;
 
+
+
 -- 用户
 create table `users`(
    `id` int not null AUTO_INCREMENT comment "用户id" ,
@@ -17,6 +19,9 @@ create table `users`(
 primary key (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
+
+
+
 -- 商品
 create table `goods`(
    `id` int not null AUTO_INCREMENT comment "商品id" ,
@@ -24,12 +29,17 @@ create table `goods`(
    `seller_id` int null comment "卖家id" ,
    `time` varchar(30) null comment "发布时间",
    `description` varchar(5000) null comment "描述",
-   `images` varchar(250) null comment "图片",
+   `images_videos` varchar(250) null comment "图片和视频",
    `tag_ids` varchar(30) null comment "标签串",
+   `if_sell` boolean null comment "是否卖出",
+   `if_del`  boolean null comment "是否删除",
    
 -- 添加约束
 primary key (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+
+
 
 -- 标签
 create table `tags`(
@@ -41,6 +51,9 @@ create table `tags`(
 primary key (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
+
+
+
 -- 收藏
 create table `collections`(
    `id` int not null AUTO_INCREMENT comment "收藏id" ,
@@ -50,6 +63,9 @@ create table `collections`(
 -- 添加约束
 primary key (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+
+
 
 -- 意见反馈
 create table `feedbacks`(

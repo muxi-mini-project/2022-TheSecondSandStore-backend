@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"strconv"
+	"strings"
 	_ "strings"
 
 	"github.com/spf13/viper"
@@ -24,4 +25,8 @@ func Write(EncodeStr string, userid int) (string, error) {
 	portstr := strconv.Itoa(port)
 	host := viper.GetString("web.host")
 	return host + ":" + portstr + path, nil
+}
+
+func StringToStringSlice(str string) []string {
+	return strings.Split(str, " ")
 }
