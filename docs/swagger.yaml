@@ -14,12 +14,22 @@ definitions:
     properties:
       description:
         type: string
-      image:
+      images:
+        items:
+          type: string
+        type: array
+      qq_account:
         type: string
       tag_ids:
-        type: string
+        items:
+          type: integer
+        type: array
       time:
         type: string
+      videos:
+        items:
+          type: string
+        type: array
     type: object
   model.LoginRequest:
     properties:
@@ -32,8 +42,7 @@ definitions:
     properties:
       code:
         type: integer
-      data:
-        type: string
+      data: {}
       message:
         type: string
     type: object
@@ -46,7 +55,7 @@ definitions:
     properties:
       image:
         type: string
-      nickName:
+      nickname:
         type: string
     type: object
   user.UserInfo:
@@ -56,7 +65,7 @@ definitions:
       nickname:
         type: string
     type: object
-host: 127.0.0.1:8080
+host: 139.9.121.221:8080
 info:
   contact:
     email: 2313661940@qq.com
@@ -86,6 +95,10 @@ paths:
           schema:
             $ref: '#/definitions/model.Response'
         "400":
+          description: errors
+          schema:
+            $ref: '#/definitions/model.Response'
+        "401":
           description: Unauthentication
           schema:
             $ref: '#/definitions/model.Response'
@@ -380,49 +393,6 @@ paths:
       summary: 获取信息
       tags:
       - goods
-    put:
-      consumes:
-      - application/json
-      description: 修改商品信息
-      parameters:
-      - description: token
-        in: header
-        name: token
-        required: true
-        type: string
-      - description: GoodsInfo
-        in: body
-        name: info
-        required: true
-        schema:
-          $ref: '#/definitions/model.GoodsInfo'
-      - description: 商品ID
-        in: path
-        name: goods_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: successful
-          schema:
-            $ref: '#/definitions/model.Response'
-        "400":
-          description: errors!
-          schema:
-            $ref: '#/definitions/model.Response'
-        "401":
-          description: Errors in authentication by token
-          schema:
-            $ref: '#/definitions/model.Response'
-        "500":
-          description: errors!
-          schema:
-            $ref: '#/definitions/model.Response'
-      summary: 更新信息
-      tags:
-      - goods
   /tag:
     get:
       consumes:
@@ -563,6 +533,104 @@ paths:
           schema:
             $ref: '#/definitions/model.Response'
       summary: 获得用户信息
+      tags:
+      - user
+  /user/goods:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户发布的商品信息
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successful
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: errors!
+          schema:
+            $ref: '#/definitions/model.Response'
+        "401":
+          description: Errors in authentication by token
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: errors!
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 获得用户发布的商品信息
+      tags:
+      - user
+  /user/goods/:goods_id:
+    delete:
+      consumes:
+      - application/json
+      description: 删除用户发布的商品信息
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successful
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: errors!
+          schema:
+            $ref: '#/definitions/model.Response'
+        "401":
+          description: Errors in authentication by token
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: errors!
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 删除用户发布的商品信息
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      description: 用户确认卖出商品
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successful
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: errors!
+          schema:
+            $ref: '#/definitions/model.Response'
+        "401":
+          description: Errors in authentication by token
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: errors!
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 用户确认卖出商品
       tags:
       - user
   /user/image:

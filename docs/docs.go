@@ -59,6 +59,12 @@ var doc = `{
                         }
                     },
                     "400": {
+                        "description": "errors",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
                         "description": "Unauthentication",
                         "schema": {
                             "$ref": "#/definitions/model.Response"
@@ -499,70 +505,6 @@ var doc = `{
                         "description": "errors in server"
                     }
                 }
-            },
-            "put": {
-                "description": "修改商品信息",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "goods"
-                ],
-                "summary": "更新信息",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "token",
-                        "name": "token",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "GoodsInfo",
-                        "name": "info",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.GoodsInfo"
-                        }
-                    },
-                    {
-                        "type": "integer",
-                        "description": "商品ID",
-                        "name": "goods_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful",
-                        "schema": {
-                            "$ref": "#/definitions/model.Response"
-                        }
-                    },
-                    "400": {
-                        "description": "errors!",
-                        "schema": {
-                            "$ref": "#/definitions/model.Response"
-                        }
-                    },
-                    "401": {
-                        "description": "Errors in authentication by token",
-                        "schema": {
-                            "$ref": "#/definitions/model.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "errors!",
-                        "schema": {
-                            "$ref": "#/definitions/model.Response"
-                        }
-                    }
-                }
             }
         },
         "/tag": {
@@ -779,6 +721,154 @@ var doc = `{
                 }
             }
         },
+        "/user/goods": {
+            "get": {
+                "description": "获取用户发布的商品信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "获得用户发布的商品信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/goods/:goods_id": {
+            "put": {
+                "description": "用户确认卖出商品",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "用户确认卖出商品",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "删除用户发布的商品信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "删除用户发布的商品信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Errors in authentication by token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "errors!",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/user/image": {
             "put": {
                 "description": "修改用户头像",
@@ -921,14 +1011,29 @@ var doc = `{
                 "description": {
                     "type": "string"
                 },
-                "image": {
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "qq_account": {
                     "type": "string"
                 },
                 "tag_ids": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 },
                 "time": {
                     "type": "string"
+                },
+                "videos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -949,9 +1054,7 @@ var doc = `{
                 "code": {
                     "type": "integer"
                 },
-                "data": {
-                    "type": "string"
-                },
+                "data": {},
                 "message": {
                     "type": "string"
                 }
@@ -971,7 +1074,7 @@ var doc = `{
                 "image": {
                     "type": "string"
                 },
-                "nickName": {
+                "nickname": {
                     "type": "string"
                 }
             }
@@ -1002,7 +1105,7 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0.0",
-	Host:        "127.0.0.1:8080",
+	Host:        "139.9.121.221:8080",
 	BasePath:    "/api/v1/",
 	Schemes:     []string{"http"},
 	Title:       "TheSecondSandStore",
