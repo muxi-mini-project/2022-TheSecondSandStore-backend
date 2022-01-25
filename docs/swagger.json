@@ -14,7 +14,7 @@
         "version": "1.0.0"
     },
     "host": "139.9.121.221:8080",
-    "basePath": "/api/v1/",
+    "basePath": "/api/v1",
     "paths": {
         "/auth": {
             "post": {

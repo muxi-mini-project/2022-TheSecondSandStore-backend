@@ -14,7 +14,7 @@ import (
 // @termsOfService http://swagger.io/terrms/
 // @contact.name rosy
 // @contact.email 2313661940@qq.com
-// @BasePath /api/v1/
+// @BasePath /api/v1
 // @Host 139.9.121.221:8080
 // @Schemes http
 func main() {
