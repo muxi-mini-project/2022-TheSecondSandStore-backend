@@ -186,7 +186,7 @@ var doc = `{
                 }
             }
         },
-        "/collection/:collection_id": {
+        "/collection/{collection_id}": {
             "delete": {
                 "description": "将收藏从数据库中删除",
                 "consumes": [
@@ -411,7 +411,7 @@ var doc = `{
                 }
             }
         },
-        "/goods/details/all/condition/:condition": {
+        "/goods/details/all/condition/{condition}": {
             "get": {
                 "description": "获取搜索的商品信息",
                 "consumes": [
@@ -468,7 +468,7 @@ var doc = `{
                 }
             }
         },
-        "/goods/details/one/:goods_id": {
+        "/goods/details/one/{goods_id}": {
             "get": {
                 "description": "获取某一商品信息",
                 "consumes": [
@@ -614,7 +614,7 @@ var doc = `{
                 }
             }
         },
-        "/tag/:tag_id": {
+        "/tag/{tag_id}": {
             "delete": {
                 "description": "将标签从数据库中删除",
                 "consumes": [
@@ -771,7 +771,7 @@ var doc = `{
                 }
             }
         },
-        "/user/goods/:goods_id": {
+        "/user/goods/{goods_id}": {
             "put": {
                 "description": "用户确认卖出商品",
                 "consumes": [

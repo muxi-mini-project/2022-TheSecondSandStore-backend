@@ -180,7 +180,7 @@ paths:
       summary: 添加收藏
       tags:
       - collection
-  /collection/:collection_id:
+  /collection/{collection_id}:
     delete:
       consumes:
       - application/json
@@ -329,7 +329,7 @@ paths:
       summary: 获取信息
       tags:
       - goods
-  /goods/details/all/condition/:condition:
+  /goods/details/all/condition/{condition}:
     get:
       consumes:
       - application/json
@@ -367,7 +367,7 @@ paths:
       summary: 搜索商品
       tags:
       - goods
-  /goods/details/one/:goods_id:
+  /goods/details/one/{goods_id}:
     get:
       consumes:
       - application/json
@@ -464,7 +464,7 @@ paths:
       summary: 添加标签
       tags:
       - tag
-  /tag/:tag_id:
+  /tag/{tag_id}:
     delete:
       consumes:
       - application/json
@@ -568,7 +568,7 @@ paths:
       summary: 获得用户发布的商品信息
       tags:
       - user
-  /user/goods/:goods_id:
+  /user/goods/{goods_id}:
     delete:
       consumes:
       - application/json
