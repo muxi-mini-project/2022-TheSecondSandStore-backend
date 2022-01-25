@@ -78,7 +78,7 @@ func CreateTag(c *gin.Context) {
 // @Failure 400 {object} model.Response "errors!"
 // @Failure 401 {object} model.Response "Errors in authentication by token"
 // @Failure 500 {object} model.Response "errors!"
-// @Router /tag/:tag_id [delete]
+// @Router /tag/{tag_id} [delete]
 func DeleteOne(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("tag_id"))
 	if err != nil {

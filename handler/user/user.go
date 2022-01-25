@@ -253,7 +253,7 @@ func GetGoodsInfo(c *gin.Context) {
 // @Failure 400 {object} model.Response "errors!"
 // @Failure 401 {object} model.Response "Errors in authentication by token"
 // @Failure 500 {object} model.Response "errors!"
-// @Router /user/goods/:goods_id [delete]
+// @Router /user/goods/{goods_id} [delete]
 func DelGoods(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("goods_id"))
 	if err != nil {
@@ -288,7 +288,7 @@ func DelGoods(c *gin.Context) {
 // @Failure 400 {object} model.Response "errors!"
 // @Failure 401 {object} model.Response "Errors in authentication by token"
 // @Failure 500 {object} model.Response "errors!"
-// @Router /user/goods/:goods_id [put]
+// @Router /user/goods/{goods_id} [put]
 func SellGoods(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("goods_id"))
 	if err != nil {

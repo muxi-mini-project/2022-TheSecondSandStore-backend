@@ -1,0 +1,92 @@
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] GET    /swagger/*any             --> github.com/swaggo/gin-swagger.CustomWrapHandler.func1 (6 handlers)
+[GIN-debug] GET    /static/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (6 handlers)
+[GIN-debug] HEAD   /static/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (6 handlers)
+[GIN-debug] POST   /api/v1/auth              --> second/handler/auth.Login (6 handlers)
+[GIN-debug] PUT    /api/v1/user/nickname     --> second/handler/user.UpdateInfoNickname (7 handlers)
+[GIN-debug] PUT    /api/v1/user/image        --> second/handler/user.UpdateInfoImage (7 handlers)
+[GIN-debug] GET    /api/v1/user              --> second/handler/user.GetInfo (7 handlers)
+[GIN-debug] GET    /api/v1/user/goods        --> second/handler/user.GetGoodsInfo (7 handlers)
+[GIN-debug] DELETE /api/v1/user/goods/:goods_id --> second/handler/user.DelGoods (7 handlers)
+[GIN-debug] PUT    /api/v1/user/goods/:goods_id --> second/handler/user.SellGoods (7 handlers)
+[GIN-debug] POST   /api/v1/goods             --> second/handler/goods.CreateGoods (7 handlers)
+[GIN-debug] GET    /api/v1/goods/details/all --> second/handler/goods.GetInfoAll (7 handlers)
+[GIN-debug] GET    /api/v1/goods/details/all/condition/:condition --> second/handler/goods.GetInfoCond (7 handlers)
+[GIN-debug] GET    /api/v1/goods/details/one/:goods_id --> second/handler/goods.GetInfoId (7 handlers)
+[GIN-debug] POST   /api/v1/collection        --> second/handler/collection.CreateCollection (7 handlers)
+[GIN-debug] DELETE /api/v1/collection/:collection_id --> second/handler/collection.DeleteOne (7 handlers)
+[GIN-debug] GET    /api/v1/collection        --> second/handler/collection.GetInfo (7 handlers)
+[GIN-debug] POST   /api/v1/tag               --> second/handler/tag.CreateTag (7 handlers)
+[GIN-debug] DELETE /api/v1/tag/:tag_id       --> second/handler/tag.DeleteOne (7 handlers)
+[GIN-debug] GET    /api/v1/tag               --> second/handler/tag.GetInfo (7 handlers)
+[GIN-debug] POST   /api/v1/feedback          --> second/handler/feedback.CreateFeedback (7 handlers)
+[GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
+Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
+[GIN-debug] Listening and serving HTTP on :8080
+[GIN] 2022/01/25 - 19:52:45 | 401 |     163.389µs |    171.41.56.83 | GET      "/api/v1/user"
+[GIN] 2022/01/25 - 19:52:49 | 200 |     1.08259ms |    171.41.56.83 | POST     "/api/v1/auth"
+[GIN] 2022/01/25 - 19:52:54 | 200 |     562.897µs |    171.41.56.83 | GET      "/api/v1/user"
+
+2022/01/25 19:55:21 [31;1m/root/2022-TheSecondSandStore-backend/handler/auth/login.go:49 [35;1mrecord not found
+[0m[33m[0.644ms] [34;1m[rows:0][0m SELECT * FROM `users` WHERE account = '2021214068' ORDER BY `users`.`id` LIMIT 1
+2022/01/25 19:55:21 Get params successfully LT-784279-rACW5jBxvyFPOvRcK73d4KmJsfLAm5-account.ccnu.edu.cn e1s1 submit
+2022/01/25 19:55:21 Login successfully
+[GIN] 2022/01/25 - 19:55:21 | 200 |  169.218081ms |    171.41.56.83 | POST     "/api/v1/auth"
+[GIN] 2022/01/25 - 19:55:28 | 200 |     498.811µs |    171.41.56.83 | GET      "/api/v1/user"
+[GIN] 2022/01/25 - 19:55:39 | 200 |    39.10691ms |    171.41.56.83 | GET      "/static/users/default.jpg"
+[GIN] 2022/01/25 - 19:55:40 | 404 |      26.087µs |    171.41.56.83 | GET      "/favicon.ico"
+[GIN] 2022/01/25 - 19:56:00 | 200 |     923.957µs |    171.41.56.83 | GET      "/api/v1/user/goods"
+[GIN] 2022/01/25 - 19:57:42 | 200 |    7.936808ms |    171.41.56.83 | PUT      "/api/v1/user/image"
+[GIN] 2022/01/25 - 20:00:01 | 200 |     3.47992ms |    171.41.56.83 | PUT      "/api/v1/user/nickname"
+[GIN] 2022/01/25 - 20:00:09 | 200 |     490.009µs |    171.41.56.83 | GET      "/api/v1/user"
+[GIN] 2022/01/25 - 20:00:26 | 200 |     121.228µs |    171.41.56.83 | GET      "/static/users/1.jpg"
+[GIN] 2022/01/25 - 20:00:43 | 200 |     525.647µs |    171.41.56.83 | GET      "/api/v1/tag"
+[GIN] 2022/01/25 - 20:01:12 | 200 |     585.046µs |    171.41.56.83 | GET      "/api/v1/tag"
+[GIN] 2022/01/25 - 20:01:42 | 200 |    3.405542ms |    171.41.56.83 | POST     "/api/v1/tag"
+[GIN] 2022/01/25 - 20:01:52 | 200 |    1.713271ms |    171.41.56.83 | GET      "/api/v1/tag"
+2022/01/25 20:02:09 strconv.Atoi: parsing ":tag_id": invalid syntax
+[GIN] 2022/01/25 - 20:02:09 | 400 |     126.828µs |    171.41.56.83 | DELETE   "/api/v1/tag/:tag_id"
+2022/01/25 20:03:30 strconv.Atoi: parsing ":tag_id": invalid syntax
+[GIN] 2022/01/25 - 20:03:30 | 400 |     130.786µs |    171.41.56.83 | DELETE   "/api/v1/tag/:tag_id"
+2022/01/25 20:03:45 strconv.Atoi: parsing ":tag_id": invalid syntax
+[GIN] 2022/01/25 - 20:03:45 | 400 |     112.638µs |    171.41.56.83 | DELETE   "/api/v1/tag/:tag_id"
+2022/01/25 20:08:54 strconv.Atoi: parsing ":tag_id": invalid syntax
+[GIN] 2022/01/25 - 20:08:54 | 400 |     124.201µs |    171.41.56.83 | DELETE   "/api/v1/tag/:tag_id"
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] GET    /swagger/*any             --> github.com/swaggo/gin-swagger.CustomWrapHandler.func1 (6 handlers)
+[GIN-debug] GET    /static/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (6 handlers)
+[GIN-debug] HEAD   /static/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (6 handlers)
+[GIN-debug] POST   /api/v1/auth              --> second/handler/auth.Login (6 handlers)
+[GIN-debug] PUT    /api/v1/user/nickname     --> second/handler/user.UpdateInfoNickname (7 handlers)
+[GIN-debug] PUT    /api/v1/user/image        --> second/handler/user.UpdateInfoImage (7 handlers)
+[GIN-debug] GET    /api/v1/user              --> second/handler/user.GetInfo (7 handlers)
+[GIN-debug] GET    /api/v1/user/goods        --> second/handler/user.GetGoodsInfo (7 handlers)
+[GIN-debug] DELETE /api/v1/user/goods/{goods_id} --> second/handler/user.DelGoods (7 handlers)
+[GIN-debug] PUT    /api/v1/user/goods/{goods_id} --> second/handler/user.SellGoods (7 handlers)
+[GIN-debug] POST   /api/v1/goods             --> second/handler/goods.CreateGoods (7 handlers)
+[GIN-debug] GET    /api/v1/goods/details/all --> second/handler/goods.GetInfoAll (7 handlers)
+[GIN-debug] GET    /api/v1/goods/details/all/condition/{condition} --> second/handler/goods.GetInfoCond (7 handlers)
+[GIN-debug] GET    /api/v1/goods/details/one/{goods_id} --> second/handler/goods.GetInfoId (7 handlers)
+[GIN-debug] POST   /api/v1/collection        --> second/handler/collection.CreateCollection (7 handlers)
+[GIN-debug] DELETE /api/v1/collection/{collection_id} --> second/handler/collection.DeleteOne (7 handlers)
+[GIN-debug] GET    /api/v1/collection        --> second/handler/collection.GetInfo (7 handlers)
+[GIN-debug] POST   /api/v1/tag               --> second/handler/tag.CreateTag (7 handlers)
+[GIN-debug] DELETE /api/v1/tag/{tag_id}      --> second/handler/tag.DeleteOne (7 handlers)
+[GIN-debug] GET    /api/v1/tag               --> second/handler/tag.GetInfo (7 handlers)
+[GIN-debug] POST   /api/v1/feedback          --> second/handler/feedback.CreateFeedback (7 handlers)
+[GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
+Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
+[GIN-debug] Listening and serving HTTP on :8080
+[GIN] 2022/01/25 - 20:15:54 | 200 |    1.180123ms |    171.41.56.83 | POST     "/api/v1/auth"
+[GIN] 2022/01/25 - 20:17:20 | 404 |      37.424µs |    171.41.56.83 | DELETE   "/api/v1/tag/4"
+[GIN] 2022/01/25 - 20:18:18 | 404 |      31.356µs |    171.41.56.83 | DELETE   "/api/v1/tag/4"

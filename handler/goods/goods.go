@@ -27,7 +27,7 @@ type GoodsInfo struct {
 // @Failure 400 {object} model.Response "errors!"
 // @Failure 401 {object} model.Response "Errors in authentication by token"
 // @Failure 500 {object} model.Response "errors!"
-// @Router /goods/details/one/:goods_id [put]
+// @Router /goods/details/one/{goods_id} [put]
 
 func UpdateInfo(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("goods_id"))
@@ -165,7 +165,7 @@ func GetInfoAll(c *gin.Context) {
 // @Param goods_id path int true "商品ID"
 // @Success 200 "ok,it has been provided successfully"
 // @Failure 400 "errors in server"
-// @Router /goods/details/one/:goods_id [get]
+// @Router /goods/details/one/{goods_id} [get]
 func GetInfoId(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("goods_id"))
 	if err != nil {
@@ -334,7 +334,7 @@ func CreateGoods(c *gin.Context) {
 // @Failure 400 {object} model.Response "errors!"
 // @Failure 401 {object} model.Response "Errors in authentication by token"
 // @Failure 500 {object} model.Response "errors!"
-// @Router /goods/details/all/condition/:condition [get]
+// @Router /goods/details/all/condition/{condition} [get]
 func GetInfoCond(c *gin.Context) {
 	condition := c.Param("condition")
 

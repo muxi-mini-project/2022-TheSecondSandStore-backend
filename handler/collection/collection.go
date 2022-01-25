@@ -77,7 +77,7 @@ func CreateCollection(c *gin.Context) {
 // @Failure 400 {object} model.Response "errors!"
 // @Failure 401 {object} model.Response "Errors in authentication by token"
 // @Failure 500 {object} model.Response "errors!"
-// @Router /collection/:collection_id [delete]
+// @Router /collection/{collection_id} [delete]
 func DeleteOne(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("collection_id"))
 	if err != nil {

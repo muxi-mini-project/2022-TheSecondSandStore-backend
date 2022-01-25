@@ -47,8 +47,8 @@ func LoadRouters(r *gin.Engine) {
 		userrouter.PUT("/image", user.UpdateInfoImage)
 		userrouter.GET("", user.GetInfo)
 		userrouter.GET("/goods", user.GetGoodsInfo)
-		userrouter.DELETE("/goods/:goods_id", user.DelGoods)
-		userrouter.PUT("/goods/:goods_id", user.SellGoods)
+		userrouter.DELETE("/goods/{goods_id}", user.DelGoods)
+		userrouter.PUT("/goods/{goods_id}", user.SellGoods)
 	}
 
 	goodsrouter := r.Group("/api/v1/goods")
@@ -57,8 +57,8 @@ func LoadRouters(r *gin.Engine) {
 		//goodsrouter.PUT("/details/one/:goods_id", goods.UpdateInfo)
 		goodsrouter.POST("", goods.CreateGoods)
 		goodsrouter.GET("/details/all", goods.GetInfoAll)
-		goodsrouter.GET("/details/all/condition/:condition", goods.GetInfoCond)
-		goodsrouter.GET("/details/one/:goods_id", goods.GetInfoId)
+		goodsrouter.GET("/details/all/condition/{condition}", goods.GetInfoCond)
+		goodsrouter.GET("/details/one/{goods_id}", goods.GetInfoId)
 
 	}
 
@@ -66,7 +66,7 @@ func LoadRouters(r *gin.Engine) {
 	collectionrouter.Use(middleware.AuthMiddleware)
 	{
 		collectionrouter.POST("", collection.CreateCollection)
-		collectionrouter.DELETE("/:collection_id", collection.DeleteOne)
+		collectionrouter.DELETE("/{collection_id}", collection.DeleteOne)
 		collectionrouter.GET("", collection.GetInfo)
 	}
 
@@ -74,7 +74,7 @@ func LoadRouters(r *gin.Engine) {
 	tagrouter.Use(middleware.AuthMiddleware)
 	{
 		tagrouter.POST("", tag.CreateTag)
-		tagrouter.DELETE("/:tag_id", tag.DeleteOne)
+		tagrouter.DELETE("/{tag_id}", tag.DeleteOne)
 		tagrouter.GET("", tag.GetInfo)
 	}
 
