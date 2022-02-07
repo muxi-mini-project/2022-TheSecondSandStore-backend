@@ -10,7 +10,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/r-rosy/General/ccnu"
-	"gorm.io/gorm"
 )
 
 // @Summary 输入账号密码登录
@@ -30,7 +29,7 @@ func Login(c *gin.Context) {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "errors in the server",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
@@ -39,24 +38,24 @@ func Login(c *gin.Context) {
 		c.JSON(400, model.Response{
 			Code:    400,
 			Message: "errors!Account or password is empty.",
-			Data:    "null",
+			Data:    nil,
 		})
 		return
 	}
 
 	var user = model.User{}
 
-	if err := model.MysqlDb.Db.Where("account = ?", req.Account).First(&user).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
+	if err := model.Query(req.Account, "account", &user); err != nil {
+		if err == model.ErrorNotFound {
 
 			pwd, err := base64.StdEncoding.DecodeString(req.Password)
 			if err != nil {
 				c.JSON(400, model.Response{
 					Code:    400,
 					Message: "invalid coding of base64",
-					Data:    "null",
+					Data:    nil,
 				})
-				log.Panicln(err)
+				log.Println(err)
 				return
 			}
 			_, err = ccnu.GetUserInfoFormOne(req.Account, string(pwd))
@@ -64,30 +63,47 @@ func Login(c *gin.Context) {
 				c.JSON(400, model.Response{
 					Code:    400,
 					Message: "The password or the account is wrong",
-					Data:    "null",
+					Data:    nil,
 				})
 				log.Println(err)
 				return
 			}
 			user.Account = req.Account
 			user.Password = req.Password
-			if err := model.MysqlDb.Db.Create(&user).Error; err != nil {
+			if err := model.Create(&user); err != nil {
 
 				c.JSON(500, model.Response{
 					Code:    500,
 					Message: "some errors in the server",
-					Data:    "null",
+					Data:    nil,
 				})
 				log.Println(err)
 				return
 			}
-			model.MysqlDb.Db.Where("account = ?", req.Account).First(&user)
-			Init(user.Id, req.Account)
+			if err := model.Query(req.Account, "account", &user); err != nil {
+				c.JSON(500, model.Response{
+					Code:    500,
+					Message: "some errors in the server",
+					Data:    nil,
+				})
+				log.Println(err)
+				return
+			}
+
+			if err := Init(user.Id, req.Account); err != nil {
+				c.JSON(500, model.Response{
+					Code:    500,
+					Message: "some errors in the server",
+					Data:    nil,
+				})
+				log.Println(err)
+				return
+			}
 		} else {
 			c.JSON(500, model.Response{
 				Code:    500,
 				Message: "some errors in the server",
-				Data:    "null",
+				Data:    nil,
 			})
 			log.Println(err)
 			return
@@ -98,21 +114,30 @@ func Login(c *gin.Context) {
 			c.JSON(400, model.Response{
 				Code:    400,
 				Message: "The password or the account is wrong",
-				Data:    "null",
+				Data:    nil,
 			})
 			log.Println(err)
 			return
 		}
 	}
 
-	model.MysqlDb.Db.Where("account = ?", req.Account).First(&user)
+	if err := model.Query(req.Account, "account", &user); err != nil {
+		c.JSON(500, model.Response{
+			Code:    500,
+			Message: "some errors in the server",
+			Data:    nil,
+		})
+		log.Println(err)
+		return
+	}
+
 	err := token.Signin(c, user.Id, req.Account)
 
 	if err != nil {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "Failed to generate token",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return

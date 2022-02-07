@@ -14,7 +14,8 @@ type SqlDb struct {
 }
 
 type Super interface {
-	AutoUpdate()
+	Save()
+	AutoUpdate(id int)
 }
 
 var (

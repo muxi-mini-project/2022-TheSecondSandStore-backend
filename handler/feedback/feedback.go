@@ -27,7 +27,7 @@ func CreateFeedback(c *gin.Context) {
 		c.JSON(400, model.Response{
 			Code:    400,
 			Message: "some errors in the body of the request",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
@@ -38,7 +38,7 @@ func CreateFeedback(c *gin.Context) {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "errors in the server",
-			Data:    "null",
+			Data:    nil,
 		})
 		return
 	}
@@ -49,11 +49,11 @@ func CreateFeedback(c *gin.Context) {
 	feedback := model.Feedback{}
 	feedback.Content = content
 	feedback.OwnerId = userid
-	if err := model.MysqlDb.Db.Create(&feedback).Error; err != nil {
+	if err := model.Create(&feedback); err != nil {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "Because of some errors,it has failed to be created",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return

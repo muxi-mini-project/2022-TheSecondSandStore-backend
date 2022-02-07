@@ -10,10 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type GoodsInfo struct {
-	BuyerId string `json:"buyer_id"`
-}
-
 /*
 // @Summary 更新信息
 // @Description 修改商品信息
@@ -104,7 +100,7 @@ func UpdateInfo(c *gin.Context) {
 func GetInfoAll(c *gin.Context) {
 	var goodses []model.Goods
 
-	if err := model.MysqlDb.Db.Order("id DESC").Where("if_del = ?", false).Where("if_sell = ?", false).Find(&goodses).Error; err != nil {
+	if err := model.Search(&goodses); err != nil {
 		c.JSON(200, model.Response{
 			Code:    200,
 			Message: "ok,empty",
@@ -118,7 +114,7 @@ func GetInfoAll(c *gin.Context) {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "errors in the server",
-			Data:    "null",
+			Data:    nil,
 		})
 		return
 	}
@@ -172,7 +168,7 @@ func GetInfoId(c *gin.Context) {
 		c.JSON(400, model.Response{
 			Code:    400,
 			Message: "some errors in the body of the request",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
@@ -183,7 +179,7 @@ func GetInfoId(c *gin.Context) {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "errors in the server",
-			Data:    "null",
+			Data:    nil,
 		})
 		return
 	}
@@ -234,7 +230,7 @@ func CreateGoods(c *gin.Context) {
 		c.JSON(400, model.Response{
 			Code:    400,
 			Message: "some errors in the body of the request",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
@@ -245,7 +241,7 @@ func CreateGoods(c *gin.Context) {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "errors in the server",
-			Data:    "null",
+			Data:    nil,
 		})
 		return
 	}
@@ -266,19 +262,18 @@ func CreateGoods(c *gin.Context) {
 	goods.Description = info.Description
 	goods.IfSell = false
 	goods.IfDel = false
-	if err := model.MysqlDb.Db.Create(&goods).Error; err != nil {
+	if err := model.Create(&goods); err != nil {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "Because of some errors,it has failed to be created",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
 	}
 
 	goods = model.Goods{}
-	model.MysqlDb.Db.Where("seller_id = ?", userid).Order("id DESC").First(&goods)
-
+	SearchAllGoods(userid, &goods)
 	src := ""
 
 	for i, v := range info.Images {
@@ -287,7 +282,7 @@ func CreateGoods(c *gin.Context) {
 			c.JSON(400, model.Response{
 				Code:    400,
 				Message: "errors in the image",
-				Data:    "null",
+				Data:    nil,
 			})
 			log.Println(err)
 			return
@@ -303,7 +298,7 @@ func CreateGoods(c *gin.Context) {
 			c.JSON(400, model.Response{
 				Code:    400,
 				Message: "errors in the videos",
-				Data:    "null",
+				Data:    nil,
 			})
 			log.Println(err)
 			return
@@ -314,7 +309,7 @@ func CreateGoods(c *gin.Context) {
 
 	goods.ImagesVideos = src + " " + srcs
 
-	model.MysqlDb.Db.Where("id = ?", goods.Id).Save(&goods)
+	Save(goods.Id, &goods)
 
 	c.JSON(200, model.Response{
 		Code:    200,
@@ -343,7 +338,7 @@ func GetInfoCond(c *gin.Context) {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "errors in the server",
-			Data:    "null",
+			Data:    nil,
 		})
 		return
 	}
@@ -351,7 +346,7 @@ func GetInfoCond(c *gin.Context) {
 
 	var goodses []model.Goods
 	constr := "%" + condition + "%"
-	model.MysqlDb.Db.Where("description LIKE ?", constr).Where("if_del = ?", false).Where("if_sell = ?", false).Find(&goodses)
+	SearchWithCondition(constr, &goodses)
 
 	var Res []model.GoodsResponse
 

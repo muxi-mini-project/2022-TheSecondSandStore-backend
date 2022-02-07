@@ -28,7 +28,7 @@ func CreateCollection(c *gin.Context) {
 		c.JSON(400, model.Response{
 			Code:    400,
 			Message: "some errors in the body of the request",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
@@ -40,7 +40,7 @@ func CreateCollection(c *gin.Context) {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "errors in the server",
-			Data:    "null",
+			Data:    nil,
 		})
 		return
 	}
@@ -49,11 +49,11 @@ func CreateCollection(c *gin.Context) {
 	collection := model.Collection{}
 	collection.GoodsId = goodsid
 	collection.OwnerId = userid
-	if err := model.MysqlDb.Db.Create(&collection).Error; err != nil {
+	if err := model.Create(&collection); err != nil {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "Because of some errors,it has failed to be created",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
@@ -84,17 +84,17 @@ func DeleteOne(c *gin.Context) {
 		c.JSON(400, model.Response{
 			Code:    400,
 			Message: "some errors in the body of the request",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
 	}
 	collection := model.Collection{}
-	if err := model.MysqlDb.Db.Where("id = ?", id).Delete(collection).Error; err != nil {
+	if err := model.Delete(id, "id", &collection); err != nil {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "Because of some errors,it has failed to be deleted",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
@@ -124,7 +124,7 @@ func GetInfo(c *gin.Context) {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "errors in the server",
-			Data:    "null",
+			Data:    nil,
 		})
 		return
 	}
@@ -132,7 +132,7 @@ func GetInfo(c *gin.Context) {
 
 	var collections []model.Collection
 
-	if err := model.MysqlDb.Db.Where("owner_id = ?", userid).Find(&collections).Error; err != nil {
+	if err := model.Find(userid, "owner_id", &collections); err != nil {
 		c.JSON(200, model.Response{
 			Code:    200,
 			Message: "ok,empty",

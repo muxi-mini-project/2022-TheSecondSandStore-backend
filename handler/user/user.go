@@ -9,11 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UserInfo struct {
-	Nickname string
-	Image    string
-}
-
 // @Summary 获得用户信息
 // @Description 获取用户昵称和头像
 // @Tags user
@@ -31,7 +26,7 @@ func GetInfo(c *gin.Context) {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "errors in the server",
-			Data:    "null",
+			Data:    nil,
 		})
 	}
 	userid := UserId.(int)
@@ -78,7 +73,7 @@ func UpdateInfoImage(c *gin.Context) {
 		c.JSON(400, model.Response{
 			Code:    400,
 			Message: "some errors in the body of the request",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
@@ -89,19 +84,19 @@ func UpdateInfoImage(c *gin.Context) {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "errors in the server",
-			Data:    "null",
+			Data:    nil,
 		})
 		return
 	}
 	userid := UserId.(int)
 
 	user := model.User{}
-	model.MysqlDb.Db.Where("id = ?", userid).First(&user)
+	model.First(userid, "id", &user)
 	if info.Image == "" {
 		c.JSON(400, model.Response{
 			Code:    400,
 			Message: "image in the body of your request is lost",
-			Data:    "null",
+			Data:    nil,
 		})
 		return
 	}
@@ -112,15 +107,14 @@ func UpdateInfoImage(c *gin.Context) {
 		c.JSON(400, model.Response{
 			Code:    400,
 			Message: "errors in the image",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
 	}
 
 	user.Image = src
-	model.MysqlDb.Db.Where("id = ?", userid).Save(&user)
-
+	model.Save(userid, "id", &user)
 	c.JSON(200, model.Response{
 		Code:    200,
 		Message: "ok",
@@ -147,7 +141,7 @@ func UpdateInfoNickname(c *gin.Context) {
 		c.JSON(400, model.Response{
 			Code:    400,
 			Message: "some errors in the body of the request",
-			Data:    "null",
+			Data:    nil,
 		})
 	}
 
@@ -156,25 +150,24 @@ func UpdateInfoNickname(c *gin.Context) {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "errors in the server",
-			Data:    "null",
+			Data:    nil,
 		})
 		return
 	}
 	userid := UserId.(int)
 
 	user := model.User{}
-	model.MysqlDb.Db.Where("id = ?", userid).First(&user)
+	model.First(userid, "id", &user)
 	if info.Nickname == "" {
 		c.JSON(400, model.Response{
 			Code:    400,
 			Message: "the nickname in the body of your request is lost",
-			Data:    "null",
+			Data:    nil,
 		})
 		return
 	}
 	user.Nickname = info.Nickname
-	model.MysqlDb.Db.Where("id = ?", userid).Save(&user)
-
+	model.Save(userid, "id", &user)
 	c.JSON(200, model.Response{
 		Code:    200,
 		Message: "ok",
@@ -199,13 +192,13 @@ func GetGoodsInfo(c *gin.Context) {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "errors in the server",
-			Data:    "null",
+			Data:    nil,
 		})
 	}
 	userid := UserId.(int)
 
 	var goodses []model.Goods
-	if err := model.MysqlDb.Db.Where("seller_id = ?", userid).Find(&goodses).Error; err != nil {
+	if err := model.Find(userid, "seller_id", &goodses); err != nil {
 		c.JSON(200, model.Response{
 			Code:    200,
 			Message: "ok,empty",
@@ -260,7 +253,7 @@ func DelGoods(c *gin.Context) {
 		c.JSON(400, model.Response{
 			Code:    400,
 			Message: "some errors in the body of the request",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
@@ -295,7 +288,7 @@ func SellGoods(c *gin.Context) {
 		c.JSON(400, model.Response{
 			Code:    400,
 			Message: "some errors in the body of the request",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return

@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"strconv"
 	"strings"
-	_ "strings"
 
 	"github.com/spf13/viper"
 )

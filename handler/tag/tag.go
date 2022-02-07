@@ -28,7 +28,7 @@ func CreateTag(c *gin.Context) {
 		c.JSON(400, model.Response{
 			Code:    400,
 			Message: "some errors in the body of the request",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
@@ -39,7 +39,7 @@ func CreateTag(c *gin.Context) {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "errors in the server",
-			Data:    "null",
+			Data:    nil,
 		})
 		return
 	}
@@ -50,11 +50,11 @@ func CreateTag(c *gin.Context) {
 	tag := model.Tag{}
 	tag.Content = content
 	tag.OwnerId = userid
-	if err := model.MysqlDb.Db.Create(&tag).Error; err != nil {
+	if err := model.Create(&tag); err != nil {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "Because of some errors,it has failed to be created",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
@@ -85,18 +85,18 @@ func DeleteOne(c *gin.Context) {
 		c.JSON(400, model.Response{
 			Code:    400,
 			Message: "some errors in the body of the request",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
 	}
 
 	tag := model.Tag{}
-	if err := model.MysqlDb.Db.Where("id = ?", id).Delete(tag).Error; err != nil {
+	if err := model.Delete(id, "id", &tag); err != nil {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "Because of some errors,it has failed to be deleted",
-			Data:    "null",
+			Data:    nil,
 		})
 		log.Println(err)
 		return
@@ -126,7 +126,7 @@ func GetInfo(c *gin.Context) {
 		c.JSON(500, model.Response{
 			Code:    500,
 			Message: "errors in the server",
-			Data:    "null",
+			Data:    nil,
 		})
 		return
 	}
@@ -134,7 +134,7 @@ func GetInfo(c *gin.Context) {
 
 	var tags []model.Tag
 
-	if err := model.MysqlDb.Db.Where("owner_id = ?", userid).Find(&tags).Error; err != nil {
+	if err := model.Find(userid, "owner_id", &tags); err != nil {
 		c.JSON(200, model.Response{
 			Code:    200,
 			Message: "ok,empty",
