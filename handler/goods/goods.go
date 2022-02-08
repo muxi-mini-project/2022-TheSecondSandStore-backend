@@ -1,6 +1,7 @@
 package goods
 
 import (
+	"encoding/base64"
 	"log"
 	_ "second/handler"
 	"second/model"
@@ -331,7 +332,21 @@ func CreateGoods(c *gin.Context) {
 // @Failure 500 {object} model.Response "errors!"
 // @Router /goods/details/all/condition/{condition} [get]
 func GetInfoCond(c *gin.Context) {
-	condition := c.Param("condition")
+	ConditionStr := c.Param("condition")
+
+	conditionby, err := base64.StdEncoding.DecodeString(ConditionStr)
+
+	if err != nil {
+		c.JSON(400, model.Response{
+			Code:    400,
+			Message: "errors in the condition",
+			Data:    nil,
+		})
+		log.Println(err)
+		return
+	}
+
+	condition := string(conditionby)
 
 	UserId, ok := c.Get("userID")
 	if !ok {
