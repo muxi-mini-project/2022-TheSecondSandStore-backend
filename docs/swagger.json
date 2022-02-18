@@ -13,7 +13,7 @@
         },
         "version": "1.0.0"
     },
-    "host": "139.9.121.221:8080",
+    "host": "121.41.45.139:8080",
     "basePath": "/api/v1",
     "paths": {
         "/auth": {
@@ -662,7 +662,7 @@
         },
         "/user": {
             "get": {
-                "description": "获取用户昵称和头像",
+                "description": "获取用户昵称头像以及收藏数发布数卖出数",
                 "consumes": [
                     "application/json"
                 ],
@@ -944,7 +944,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.UserInfo"
+                            "$ref": "#/definitions/model.UserInfo"
                         }
                     }
                 ],
@@ -1006,6 +1006,9 @@
                         "type": "string"
                     }
                 },
+                "price": {
+                    "type": "string"
+                },
                 "qq_account": {
                     "type": "string"
                 },
@@ -1058,17 +1061,6 @@
             }
         },
         "model.UserInfo": {
-            "type": "object",
-            "properties": {
-                "image": {
-                    "type": "string"
-                },
-                "nickname": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.UserInfo": {
             "type": "object",
             "properties": {
                 "image": {

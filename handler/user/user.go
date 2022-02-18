@@ -132,7 +132,7 @@ func UpdateInfoImage(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param token header string true "token"
-// @Param info body user.UserInfo true "UserInfo"
+// @Param info body model.UserInfo true "UserInfo"
 // @Success 200 {object} model.Response "successful"
 // @Failure 400 {object} model.Response "errors!"
 // @Failure 401 {object} model.Response "Errors in authentication by token"

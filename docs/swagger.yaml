@@ -18,6 +18,8 @@ definitions:
         items:
           type: string
         type: array
+      price:
+        type: string
       qq_account:
         type: string
       tag_ids:
@@ -58,14 +60,7 @@ definitions:
       nickname:
         type: string
     type: object
-  user.UserInfo:
-    properties:
-      image:
-        type: string
-      nickname:
-        type: string
-    type: object
-host: 139.9.121.221:8080
+host: 121.41.45.139:8080
 info:
   contact:
     email: 2313661940@qq.com
@@ -506,7 +501,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 获取用户昵称和头像
+      description: 获取用户昵称头像以及收藏数发布数卖出数
       parameters:
       - description: token
         in: header
@@ -688,7 +683,7 @@ paths:
         name: info
         required: true
         schema:
-          $ref: '#/definitions/user.UserInfo'
+          $ref: '#/definitions/model.UserInfo'
       produces:
       - application/json
       responses:

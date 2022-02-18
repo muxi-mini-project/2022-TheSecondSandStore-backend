@@ -673,7 +673,7 @@ var doc = `{
         },
         "/user": {
             "get": {
-                "description": "获取用户昵称和头像",
+                "description": "获取用户昵称头像以及收藏数发布数卖出数",
                 "consumes": [
                     "application/json"
                 ],
@@ -955,7 +955,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.UserInfo"
+                            "$ref": "#/definitions/model.UserInfo"
                         }
                     }
                 ],
@@ -1016,6 +1016,9 @@ var doc = `{
                     "items": {
                         "type": "string"
                     }
+                },
+                "price": {
+                    "type": "string"
                 },
                 "qq_account": {
                     "type": "string"
@@ -1078,17 +1081,6 @@ var doc = `{
                     "type": "string"
                 }
             }
-        },
-        "user.UserInfo": {
-            "type": "object",
-            "properties": {
-                "image": {
-                    "type": "string"
-                },
-                "nickname": {
-                    "type": "string"
-                }
-            }
         }
     }
 }`
@@ -1105,7 +1097,7 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0.0",
-	Host:        "139.9.121.221:8080",
+	Host:        "121.41.45.139:8080",
 	BasePath:    "/api/v1",
 	Schemes:     []string{"http"},
 	Title:       "TheSecondSandStore",
