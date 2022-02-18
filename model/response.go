@@ -27,6 +27,7 @@ type GoodsResponse struct {
 	IfSell            bool     `json:"if_sell"`
 	IfDel             bool     `json:"if_del"`
 	IfCollected       bool     `json:"if_collected"`
+	Price             string   `json:"price"`
 }
 
 type TagResponse struct {
@@ -35,6 +36,9 @@ type TagResponse struct {
 }
 
 type UserResponse struct {
-	Image    string `json:"image"`
-	Nickname string `json:"nickname"`
+	Image             string `json:"image"`
+	Nickname          string `json:"nickname"`
+	CollectionsNumber int    `json:"collections_number"`
+	PostsNumber       int    `json:"posts_number"`
+	SellsNumber       int    `json:"sells_number"`
 }

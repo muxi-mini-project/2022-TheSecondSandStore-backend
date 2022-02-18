@@ -33,6 +33,7 @@ create table `goods`(
    `tag_ids` varchar(30) null comment "标签串",
    `if_sell` boolean null comment "是否卖出",
    `if_del`  boolean null comment "是否删除",
+   `price` varchar(10) null comment "价格",
    
 -- 添加约束
 primary key (`id`)

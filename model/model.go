@@ -19,6 +19,7 @@ type Goods struct {
 	TagIds       string `json:"tag_ids" gorm:"column:tag_ids"`
 	IfSell       bool   `json:"if_sell" gorm:"column:if_sell"`
 	IfDel        bool   `json:"if_del" gorm:"column:if_del"`
+	Price        string `json:"price" gorm:"column:price"`
 }
 
 type Tag struct {

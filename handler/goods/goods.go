@@ -133,6 +133,7 @@ func GetInfoAll(c *gin.Context) {
 		res.Time = v.Time
 		res.IfDel = v.IfDel
 		res.IfSell = v.IfSell
+		res.Price = v.Price
 		superuser := &model.SuperUser
 		superuser.AutoUpdate(v.SellerId)
 
@@ -197,6 +198,7 @@ func GetInfoId(c *gin.Context) {
 	res.IfDel = supergoods.IfDel
 	res.IfSell = supergoods.IfDel
 	res.IfCollected = Search(userid, supergoods.Id)
+	res.Price = supergoods.Price
 
 	superuser := &model.SuperUser
 	superuser.AutoUpdate(supergoods.SellerId)
@@ -263,6 +265,7 @@ func CreateGoods(c *gin.Context) {
 	goods.Description = info.Description
 	goods.IfSell = false
 	goods.IfDel = false
+	goods.Price = info.Price
 	if err := model.Create(&goods); err != nil {
 		c.JSON(500, model.Response{
 			Code:    500,
@@ -375,6 +378,7 @@ func GetInfoCond(c *gin.Context) {
 		res.IfDel = v.IfDel
 		res.IfSell = v.IfSell
 		res.IfCollected = Search(userid, v.Id)
+		res.Price = v.Price
 
 		superuser := &model.SuperUser
 		superuser.AutoUpdate(v.SellerId)

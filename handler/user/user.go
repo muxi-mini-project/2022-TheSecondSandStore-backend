@@ -10,7 +10,7 @@ import (
 )
 
 // @Summary 获得用户信息
-// @Description 获取用户昵称和头像
+// @Description 获取用户昵称头像以及收藏数发布数卖出数
 // @Tags user
 // @Accept json
 // @Produce json
@@ -47,6 +47,10 @@ func GetInfo(c *gin.Context) {
 		res.Nickname = superuser.Nickname
 	}
 
+	colle, post, sell := CountNumbers(userid)
+	res.CollectionsNumber = colle
+	res.PostsNumber = post
+	res.SellsNumber = sell
 	c.JSON(200, model.Response{
 		Code:    200,
 		Message: "ok",
@@ -267,7 +271,7 @@ func DelGoods(c *gin.Context) {
 	c.JSON(200, model.Response{
 		Code:    200,
 		Message: "ok",
-		Data:    "successful",
+		Data:    nil,
 	})
 }
 
@@ -302,7 +306,7 @@ func SellGoods(c *gin.Context) {
 	c.JSON(200, model.Response{
 		Code:    200,
 		Message: "ok",
-		Data:    "successful",
+		Data:    nil,
 	})
 
 }

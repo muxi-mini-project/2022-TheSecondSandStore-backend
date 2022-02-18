@@ -20,6 +20,7 @@ type GoodsInfo struct {
 	TagIds      []int    `json:"tag_ids"`
 	Time        string   `json:"time"`
 	QQAccount   string   `json:"qq_account"`
+	Price       string   `json:"price"`
 }
 
 type TagInfo struct {
