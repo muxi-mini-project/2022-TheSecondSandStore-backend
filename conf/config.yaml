@@ -13,4 +13,4 @@ RemoteKey:
   SECRET_KEY : "9fFjcuh5r1mSbakKoWdwpFgNlExVq03TNgEI5SjU"
 web:
   host: "121.41.45.139"
-  port: 8080
+  port: 80

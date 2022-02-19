@@ -15,12 +15,12 @@ import (
 // @contact.name rosy
 // @contact.email 2313661940@qq.com
 // @BasePath /api/v1
-// @Host 121.41.45.139:8080
+// @Host 121.41.45.139:80
 // @Schemes http
 func main() {
 	config.ConfigInit()
 	model.InitConnection()
 	r := gin.Default()
 	router.LoadRouters(r)
-	r.Run(":8080")
+	r.Run(":80")
 }
