@@ -21,14 +21,7 @@ import (
 // @Failure 500 {object} model.Response "errors!"
 // @Router /user [get]
 func GetInfo(c *gin.Context) {
-	UserId, ok := c.Get("userID")
-	if !ok {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "errors in the server",
-			Data:    nil,
-		})
-	}
+	UserId := c.MustGet("userID")
 	userid := UserId.(int)
 
 	var res model.UserResponse
@@ -83,15 +76,7 @@ func UpdateInfoImage(c *gin.Context) {
 		return
 	}
 
-	UserId, ok := c.Get("userID")
-	if !ok {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "errors in the server",
-			Data:    nil,
-		})
-		return
-	}
+	UserId := c.MustGet("userID")
 	userid := UserId.(int)
 
 	user := model.User{}
@@ -149,15 +134,7 @@ func UpdateInfoNickname(c *gin.Context) {
 		})
 	}
 
-	UserId, ok := c.Get("userID")
-	if !ok {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "errors in the server",
-			Data:    nil,
-		})
-		return
-	}
+	UserId := c.MustGet("userID")
 	userid := UserId.(int)
 
 	user := model.User{}
@@ -191,14 +168,7 @@ func UpdateInfoNickname(c *gin.Context) {
 // @Failure 500 {object} model.Response "errors!"
 // @Router /user/goods [get]
 func GetGoodsInfo(c *gin.Context) {
-	UserId, ok := c.Get("userID")
-	if !ok {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "errors in the server",
-			Data:    nil,
-		})
-	}
+	UserId := c.MustGet("userID")
 	userid := UserId.(int)
 
 	var goodses []model.Goods

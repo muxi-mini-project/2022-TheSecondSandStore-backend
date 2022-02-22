@@ -35,15 +35,8 @@ func CreateCollection(c *gin.Context) {
 	}
 	goodsid := info.GoodsId
 
-	UserId, ok := c.Get("userID")
-	if !ok {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "errors in the server",
-			Data:    nil,
-		})
-		return
-	}
+	UserId := c.MustGet("userID")
+
 	userid := UserId.(int)
 
 	collection := model.Collection{}
@@ -119,15 +112,7 @@ func DeleteOne(c *gin.Context) {
 // @Failure 500 {object} model.Response "errors!"
 // @Router /collection [get]
 func GetInfo(c *gin.Context) {
-	UserId, ok := c.Get("userID")
-	if !ok {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "errors in the server",
-			Data:    nil,
-		})
-		return
-	}
+	UserId := c.MustGet("userID")
 	userid := UserId.(int)
 
 	var collections []model.Collection

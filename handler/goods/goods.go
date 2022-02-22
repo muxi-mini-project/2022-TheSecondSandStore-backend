@@ -110,15 +110,7 @@ func GetInfoAll(c *gin.Context) {
 		return
 	}
 
-	UserId, ok := c.Get("userID")
-	if !ok {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "errors in the server",
-			Data:    nil,
-		})
-		return
-	}
+	UserId := c.MustGet("userID")
 
 	userid := UserId.(int)
 
@@ -176,15 +168,7 @@ func GetInfoId(c *gin.Context) {
 		return
 	}
 
-	UserId, ok := c.Get("userID")
-	if !ok {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "errors in the server",
-			Data:    nil,
-		})
-		return
-	}
+	UserId := c.MustGet("userID")
 
 	userid := UserId.(int)
 
@@ -239,15 +223,7 @@ func CreateGoods(c *gin.Context) {
 		return
 	}
 
-	UserId, ok := c.Get("userID")
-	if !ok {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "errors in the server",
-			Data:    nil,
-		})
-		return
-	}
+	UserId := c.MustGet("userID")
 	userid := UserId.(int)
 
 	//
@@ -351,15 +327,7 @@ func GetInfoCond(c *gin.Context) {
 
 	condition := string(conditionby)
 
-	UserId, ok := c.Get("userID")
-	if !ok {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "errors in the server",
-			Data:    nil,
-		})
-		return
-	}
+	UserId := c.MustGet("userID")
 	userid := UserId.(int)
 
 	var goodses []model.Goods

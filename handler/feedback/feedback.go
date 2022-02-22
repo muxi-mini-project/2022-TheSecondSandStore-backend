@@ -33,15 +33,8 @@ func CreateFeedback(c *gin.Context) {
 		return
 	}
 
-	UserId, ok := c.Get("userID")
-	if !ok {
-		c.JSON(500, model.Response{
-			Code:    500,
-			Message: "errors in the server",
-			Data:    nil,
-		})
-		return
-	}
+	UserId := c.MustGet("userID")
+
 	userid := UserId.(int)
 
 	content := info.Content
