@@ -49,15 +49,7 @@ func Login(c *gin.Context) {
 		if err == model.ErrorNotFound {
 
 			pwd := base64.StdEncoding.EncodeToString([]byte(req.Password))
-			if err != nil {
-				c.JSON(500, model.Response{
-					Code:    500,
-					Message: "errors in the encoding of password in the server",
-					Data:    nil,
-				})
-				log.Println(err)
-				return
-			}
+
 			_, err = ccnu.GetUserInfoFormOne(req.Account, req.Password)
 			if err != nil {
 				c.JSON(400, model.Response{
