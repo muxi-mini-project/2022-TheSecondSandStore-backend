@@ -42,7 +42,7 @@ var doc = `{
                 "summary": "输入账号密码登录",
                 "parameters": [
                     {
-                        "description": "Account 账户 Password 将密码进行base64编码后的字符串",
+                        "description": "Account 账户 Password 密码",
                         "name": "req",
                         "in": "body",
                         "required": true,

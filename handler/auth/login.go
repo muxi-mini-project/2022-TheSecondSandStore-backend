@@ -17,7 +17,7 @@ import (
 // @Tags auth
 // @Accept  json
 // @Produce  json
-// @Param req body model.LoginRequest true "Account 账户 Password 将密码进行base64编码后的字符串"
+// @Param req body model.LoginRequest true "Account 账户 Password 密码"
 // @Success 200 {object} model.Response "successful"
 // @Failure 400 {object} model.Response "errors"
 // @Failure 401 {object} model.Response "Unauthentication"
@@ -48,17 +48,17 @@ func Login(c *gin.Context) {
 	if err := model.Query(req.Account, "account", &user); err != nil {
 		if err == model.ErrorNotFound {
 
-			pwd, err := base64.StdEncoding.DecodeString(req.Password)
+			pwd := base64.StdEncoding.EncodeToString([]byte(req.Password))
 			if err != nil {
-				c.JSON(400, model.Response{
-					Code:    400,
-					Message: "invalid coding of base64",
+				c.JSON(500, model.Response{
+					Code:    500,
+					Message: "errors in the encoding of password in the server",
 					Data:    nil,
 				})
 				log.Println(err)
 				return
 			}
-			_, err = ccnu.GetUserInfoFormOne(req.Account, string(pwd))
+			_, err = ccnu.GetUserInfoFormOne(req.Account, req.Password)
 			if err != nil {
 				c.JSON(400, model.Response{
 					Code:    400,
@@ -69,7 +69,7 @@ func Login(c *gin.Context) {
 				return
 			}
 			user.Account = req.Account
-			user.Password = req.Password
+			user.Password = pwd
 			if err := model.Create(&user); err != nil {
 
 				c.JSON(500, model.Response{
@@ -109,8 +109,7 @@ func Login(c *gin.Context) {
 			return
 		}
 	} else {
-
-		if user.Password != req.Password {
+		if user.Password != base64.StdEncoding.EncodeToString([]byte(req.Password)) {
 			c.JSON(400, model.Response{
 				Code:    400,
 				Message: "The password or the account is wrong",

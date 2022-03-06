@@ -76,7 +76,7 @@ paths:
       - application/json
       description: 登录
       parameters:
-      - description: Account 账户 Password 将密码进行base64编码后的字符串
+      - description: Account 账户 Password 密码
         in: body
         name: req
         required: true
