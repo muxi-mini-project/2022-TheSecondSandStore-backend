@@ -143,7 +143,7 @@ func GetInfo(c *gin.Context) {
 		res.Time = super.Time
 		res.IfDel = super.IfDel
 		res.IfSell = super.IfSell
-
+		res.Id = super.Id
 		res.QQAccount = superuser.QQAccount
 		res.UserImage = superuser.Image
 		res.UserNickname = superuser.Nickname

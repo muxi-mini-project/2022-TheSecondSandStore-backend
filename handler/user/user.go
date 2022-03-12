@@ -192,7 +192,8 @@ func GetGoodsInfo(c *gin.Context) {
 		res.Time = v.Time
 		res.IfSell = v.IfSell
 		res.IfDel = v.IfDel
-
+		res.Id = v.Id
+		res.Price = v.Price
 		superuser := &model.SuperUser
 		superuser.AutoUpdate(v.SellerId)
 

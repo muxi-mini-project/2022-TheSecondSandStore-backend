@@ -7,6 +7,7 @@ type Response struct {
 }
 
 type CollectionResponse struct {
+	Id                int      `json:"id"`
 	UserImage         string   `json:"user_image"`
 	UserNickname      string   `json:"user_nickname"`
 	QQAccount         string   `json:"qq_account"`
@@ -18,6 +19,7 @@ type CollectionResponse struct {
 }
 
 type GoodsResponse struct {
+	Id                int      `json:"id"`
 	UserImage         string   `json:"user_image"`
 	UserNickname      string   `json:"user_nickname"`
 	QQAccount         string   `json:"qq_account"`

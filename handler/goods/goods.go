@@ -1,7 +1,6 @@
 package goods
 
 import (
-	"encoding/base64"
 	"log"
 	_ "second/handler"
 	"second/model"
@@ -128,7 +127,7 @@ func GetInfoAll(c *gin.Context) {
 		res.Price = v.Price
 		superuser := &model.SuperUser
 		superuser.AutoUpdate(v.SellerId)
-
+		res.Id = v.Id
 		res.IfCollected = Search(userid, v.Id)
 
 		res.QQAccount = superuser.QQAccount
@@ -183,7 +182,7 @@ func GetInfoId(c *gin.Context) {
 	res.IfSell = supergoods.IfDel
 	res.IfCollected = Search(userid, supergoods.Id)
 	res.Price = supergoods.Price
-
+	res.Id = supergoods.Id
 	superuser := &model.SuperUser
 	superuser.AutoUpdate(supergoods.SellerId)
 
@@ -311,21 +310,7 @@ func CreateGoods(c *gin.Context) {
 // @Failure 500 {object} model.Response "errors!"
 // @Router /goods/details/all/condition/{condition} [get]
 func GetInfoCond(c *gin.Context) {
-	ConditionStr := c.Param("condition")
-
-	conditionby, err := base64.StdEncoding.DecodeString(ConditionStr)
-
-	if err != nil {
-		c.JSON(400, model.Response{
-			Code:    400,
-			Message: "errors in the condition",
-			Data:    nil,
-		})
-		log.Println(err)
-		return
-	}
-
-	condition := string(conditionby)
+	condition := c.Param("condition")
 
 	UserId := c.MustGet("userID")
 	userid := UserId.(int)
@@ -347,7 +332,7 @@ func GetInfoCond(c *gin.Context) {
 		res.IfSell = v.IfSell
 		res.IfCollected = Search(userid, v.Id)
 		res.Price = v.Price
-
+		res.Id = v.Id
 		superuser := &model.SuperUser
 		superuser.AutoUpdate(v.SellerId)
 

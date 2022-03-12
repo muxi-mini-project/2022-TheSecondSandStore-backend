@@ -122,7 +122,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	err := token.Signin(c, user.Id, req.Account)
+	tokenString, err := token.Signin(c, user.Id, req.Account)
 
 	if err != nil {
 		c.JSON(500, model.Response{
@@ -137,7 +137,7 @@ func Login(c *gin.Context) {
 	c.JSON(200, model.Response{
 		Code:    200,
 		Message: "ok",
-		Data:    "successful",
+		Data:    tokenString,
 	})
 
 }

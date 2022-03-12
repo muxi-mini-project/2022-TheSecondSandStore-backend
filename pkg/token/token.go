@@ -2,7 +2,6 @@ package token
 
 import (
 	"errors"
-	"net/http"
 	"strconv"
 	"time"
 
@@ -24,7 +23,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func Signin(c *gin.Context, userid int, account string) error {
+func Signin(c *gin.Context, userid int, account string) (string, error) {
 
 	jwtKey = []byte(viper.GetString("token.secret_key"))
 	// 在这里声明令牌的到期时间，我们将其保留为一周
@@ -48,26 +47,14 @@ func Signin(c *gin.Context, userid int, account string) error {
 	// 创建JWT字符串
 
 	tokenString, err := token.SignedString(jwtKey)
-	if err != nil {
 
+	if err != nil {
 		// 如果创建JWT时出错，则返回内部服务器错误
 
-		return err
+		return "", err
 	}
 
-	// 最后，我们将客户端cookie token设置为刚刚生成的JWT
-	// 我们还设置了与令牌本身相同的cookie到期时间
-	host := viper.GetString("web.host")
-	http.SetCookie(c.Writer, &http.Cookie{
-		Name:     "token",
-		Value:    tokenString,
-		Expires:  expirationTime,
-		HttpOnly: true,
-		Domain:   host,
-		Path:     "/",
-	})
-
-	return nil
+	return tokenString, nil
 }
 
 func Parse(c *gin.Context) (*Claims, error) {
@@ -76,13 +63,7 @@ func Parse(c *gin.Context) (*Claims, error) {
 	claims := &Claims{}
 
 	// 我们可以从每个请求的Cookie中获取会话令牌
-	value, err := c.Cookie("token")
-	if err != nil {
-		return claims, err
-	}
-
-	// 从Cookie获取JWT字符串
-	tknStr := value
+	tknStr := c.Request.Header["token"][0]
 
 	// 解析JWT字符串并将结果存储在`claims`中。
 	// 请注意，我们也在此方法中传递了密钥。

@@ -32,7 +32,6 @@ func AuthMiddleware(c *gin.Context) {
 		return
 	}
 	c.Set("userID", id)
-	//c.Set("expiresAt", ctx.ExpiresAt)
 
 	c.Next()
 }
