@@ -2,6 +2,7 @@ package token
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -64,7 +65,7 @@ func Parse(c *gin.Context) (*Claims, error) {
 
 	// 我们可以从每个请求的Cookie中获取会话令牌
 	tknStr := c.Request.Header["token"][0]
-
+	fmt.Println(c.Request.Header["token"])
 	// 解析JWT字符串并将结果存储在`claims`中。
 	// 请注意，我们也在此方法中传递了密钥。
 	// 如果令牌无效（如果令牌已根据我们设置的登录到期时间过期）或者签名不匹配,此方法会返回错误.
