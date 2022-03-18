@@ -4,7 +4,7 @@ import (
 	"second/model"
 	"second/pkg/token"
 	"strconv"
-
+	"log"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,9 +15,10 @@ func AuthMiddleware(c *gin.Context) {
 	if err != nil {
 		c.JSON(401, model.Response{
 			Code:    401,
-			Message: "Errors in authentication by token",
+			Message: err.Error(),
 			Data:    "null",
 		})
+		log.Println(err)
 		c.Abort()
 		return
 	}
@@ -29,6 +30,7 @@ func AuthMiddleware(c *gin.Context) {
 			Data:    "null",
 		})
 		c.Abort()
+		log.Println(err)
 		return
 	}
 	c.Set("userID", id)
