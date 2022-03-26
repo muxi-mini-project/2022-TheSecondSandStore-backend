@@ -7,7 +7,7 @@ import (
 func Search(UserId int, GoodsId int) bool {
 
 	var collections []model.Collection
-	if err := model.MysqlDb.Db.Where("owner_id = ?", UserId).Where("goods_id = ?", GoodsId).Find(&collections).Error; err != nil {
+	if model.MysqlDb.Db.Where("owner_id = ?", UserId).Where("goods_id = ?", GoodsId).Find(&collections); len(collections) == 0 {
 		return false
 	}
 
